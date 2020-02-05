@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_close"
+        android:icon="@drawable/ic_close_24px"
+        android:iconTint="@color/cardview_dark_background"
+        android:title="Close"
+        app:showAsAction="always" />
+
+</menu>
