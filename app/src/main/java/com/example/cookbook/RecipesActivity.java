@@ -8,6 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 public class RecipesActivity extends AppCompatActivity {
 
@@ -18,6 +22,13 @@ public class RecipesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.recipes_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.recipes_title);
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recipes_list);
+
+        List<RecipeListItem> recipes = RecipeListItem.createSampleRecipeList();
+        RecipeListAdapter adapter = new RecipeListAdapter(recipes);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
 
