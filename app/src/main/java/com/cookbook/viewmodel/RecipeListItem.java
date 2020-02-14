@@ -1,4 +1,4 @@
-package com.example.cookbook;
+package com.cookbook.viewmodel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public class RecipeListItem {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public static List<RecipeListItem> createSampleRecipeList() {

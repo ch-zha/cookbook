@@ -1,4 +1,4 @@
-package com.example.cookbook;
+package com.cookbook.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,13 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cookbook.viewmodel.RecipeListItem;
+import com.example.cookbook.R;
+
 import java.util.List;
 
-public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
+public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.RecipeViewHolder> {
 
     private List<RecipeListItem> mRecipes;
 
-    public RecipeListAdapter(List<RecipeListItem> recipes) {
+    public PantryListAdapter(List<RecipeListItem> recipes) {
         mRecipes = recipes;
     }
 

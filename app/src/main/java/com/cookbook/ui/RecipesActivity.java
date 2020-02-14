@@ -1,4 +1,4 @@
-package com.example.cookbook;
+package com.cookbook.ui;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.cookbook.ui.adapters.RecipeListAdapter;
+import com.example.cookbook.R;
+import com.cookbook.viewmodel.RecipeListItem;
 
 import java.util.List;
 

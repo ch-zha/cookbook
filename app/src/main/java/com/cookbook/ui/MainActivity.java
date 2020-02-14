@@ -1,16 +1,16 @@
-package com.example.cookbook;
+package com.cookbook.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.cookbook.ui.adapters.SectionsPagerAdapter;
+import com.example.cookbook.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+
 import android.view.View;
-import com.example.cookbook.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 Intent goToRecipes = new Intent(view.getContext(), RecipesActivity.class);
                 startActivity(goToRecipes);
                 overridePendingTransition(R.anim.slide_up, R.anim.no_anim);
