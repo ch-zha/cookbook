@@ -6,37 +6,41 @@ import java.util.List;
 
 public class Recipe {
 
-    enum Measurement {
-        Whole,
-        Gram,
-        TBSP
-    }
-
-    private HashMap<String, Float> ingredients = null;
+    private String name = null;
+    private HashMap<Ingredient, Float> ingredients = null;
     private List<String> steps = null;
 
 
-    public Recipe() {
-        ingredients = new HashMap<>();
-        steps = new ArrayList<>();
+    public Recipe(String name) {
+        this.name = name.replaceAll("[^A-Za-z0-9 ]","");
+        this.ingredients = new HashMap<>();
+        this.steps = new ArrayList<>();
     }
 
-    public float getIngredientQuantity(String ingredient) {
-        return ingredients.get(ingredient.toLowerCase());
+    public String getName() {
+        return this.name;
+    }
+
+    public float getIngredientQuantity(Ingredient ingredient) {
+        return ingredients.get(ingredient);
     }
 
     /* Returns true if ingredient was already present (modify), false if ingredient was not (add) */
-    public boolean addIngredient(String ingredient, float quantity) {
+    public boolean addIngredient(Ingredient ingredient, float quantity) {
         //Change to lowercase to prevent duplicate ingredients with different cases from being added.
-        Float old_value = ingredients.put(ingredient.toLowerCase(), quantity);
+        Float old_value = ingredients.put(ingredient, quantity);
         return (old_value != null);
     }
 
+    public void addStep(String step) {
+        this.steps.add(step);
+    }
+
     public static Recipe createSampleRecipe() {
-        Recipe recipe = new Recipe();
-        recipe.addIngredient("Banana", 1f);
-        recipe.addIngredient("Ice Cream", 2f);
-        recipe.addIngredient("Cherry", 1f);
+        Recipe recipe = new Recipe("Sample");
+        recipe.addIngredient(new Ingredient("Banana"), 1f);
+        recipe.addIngredient(new Ingredient("Ice Cream"), 2f);
+        recipe.addIngredient(new Ingredient("Cherry"), 1f);
         return recipe;
     }
 

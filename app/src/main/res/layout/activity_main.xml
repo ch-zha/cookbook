@@ -41,5 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:tint="@android:color/white"
+        app:fabSize="auto"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_list_48px" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

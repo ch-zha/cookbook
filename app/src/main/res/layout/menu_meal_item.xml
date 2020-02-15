@@ -10,7 +10,8 @@
         android:id="@+id/menu_meal_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:padding="5sp"
+        style="@style/TextAppearance.AppCompat.Body1"
         android:text="Hello"
         />
 

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cookbook.ui.helpers.ItemClickListener;
 import com.example.cookbook.R;
 import com.cookbook.viewmodel.RecipeListItem;
 
@@ -19,9 +20,11 @@ import java.util.List;
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
 
     private List<RecipeListItem> mRecipes;
+    private ItemClickListener clickListener = null;
 
-    public RecipeListAdapter(List<RecipeListItem> recipes) {
-        mRecipes = recipes;
+    public RecipeListAdapter(List<RecipeListItem> recipes, ItemClickListener clickListener) {
+        this.mRecipes = recipes;
+        this.clickListener = clickListener;
     }
 
     @NonNull
@@ -51,7 +54,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         return mRecipes.size();
     }
 
-    public static class RecipeViewHolder extends RecyclerView.ViewHolder {
+    public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView name;
         public ImageView icon;
@@ -61,7 +64,14 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
             name = (TextView) view.findViewById(R.id.recipe_item_name);
             icon = (ImageView) view.findViewById(R.id.recipe_item_icon);
+
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            RecipeListItem clicked = mRecipes.get(getAdapterPosition());
+            clickListener.onClick(v, clicked.getName());
+        }
     }
 }

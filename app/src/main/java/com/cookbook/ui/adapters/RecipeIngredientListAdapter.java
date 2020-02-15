@@ -5,27 +5,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.model.Ingredient;
-import com.cookbook.viewmodel.RecipeListItem;
 import com.example.cookbook.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.PantryViewHolder> {
+public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngredientListAdapter.PantryViewHolder> {
 
     private HashMap<Ingredient, Float> mIngredients;
     private List<Ingredient> mIngredientsSorted;
 
-    public PantryListAdapter(HashMap<Ingredient, Float> ingredients) {
+    public RecipeIngredientListAdapter(HashMap<Ingredient, Float> ingredients) {
         mIngredients = ingredients;
         mIngredientsSorted = new ArrayList<> (mIngredients.keySet());
     }

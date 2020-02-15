@@ -1,6 +1,12 @@
 <resources>
+    <!-- Titles/Headers -->
     <string name="app_name">Cookbook</string>
-    <string name="menu_tab_text">Menu</string>
+    <string name="menu_tab_text">Planner</string>
     <string name="pantry_tab_text">Shopping List</string>
     <string name="recipes_title">Recipes</string>
+
+    <!-- Edit Recipe Activity -->
+    <string name="recipe_ingredients">Ingredients</string>
+    <string name="recipe_steps">Steps</string>
+
 </resources>
