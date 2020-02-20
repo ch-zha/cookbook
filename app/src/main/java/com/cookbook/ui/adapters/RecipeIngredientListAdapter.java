@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngredientListAdapter.PantryViewHolder> {
+public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngredientListAdapter.IngredientViewHolder> {
 
     private HashMap<Ingredient, Float> mIngredients;
     private List<Ingredient> mIngredientsSorted;
@@ -29,20 +29,20 @@ public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngr
 
     @NonNull
     @Override
-    public PantryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.pantry_ingredient_item, parent, false);
+        View contactView = inflater.inflate(R.layout.recipe_ingredient_item, parent, false);
 
         // Return a new holder instance
-        PantryViewHolder viewHolder = new PantryViewHolder(contactView);
+        IngredientViewHolder viewHolder = new IngredientViewHolder(contactView);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PantryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
         Ingredient ingredient = mIngredientsSorted.get(position);
 
         holder.name.setText(ingredient.getDisplayName());
@@ -54,18 +54,16 @@ public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngr
         return mIngredientsSorted.size();
     }
 
-    public static class PantryViewHolder extends RecyclerView.ViewHolder {
+    public static class IngredientViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name;
         public TextView quantity;
-        public CheckBox checkBox;
 
-        public PantryViewHolder(View view) {
+        public IngredientViewHolder(View view) {
             super(view);
 
-            name = (TextView) view.findViewById(R.id.pantry_item_name);
-            quantity = (TextView) view.findViewById(R.id.pantry_item_quantity);
-            checkBox = (CheckBox) view.findViewById(R.id.pantry_item_checkbox);
+            name = (TextView) view.findViewById(R.id.recipe_ingredient_name);
+            quantity = (TextView) view.findViewById(R.id.recipe_ingredient_quantity);
         }
 
     }

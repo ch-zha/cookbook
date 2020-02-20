@@ -3,6 +3,7 @@ package com.cookbook.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.cookbook.content.DataManagerService;
 import com.cookbook.ui.adapters.SectionsPagerAdapter;
 import com.example.cookbook.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -13,6 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,5 +39,6 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_up, R.anim.no_anim);
             }
         });
+        startService(new Intent(this, DataManagerService.class));
     }
 }

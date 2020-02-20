@@ -1,15 +1,17 @@
-package com.cookbook.viewmodel;
+package com.cookbook.model;
+
+import com.cookbook.viewmodel.RecipeListItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MenuCard {
+public class MenuDay {
 
     private String day = null;
     private List<RecipeListItem> menu_items = null;
 
-    public MenuCard(String day) {
+    public MenuDay(String day) {
         this.day = day;
         this.menu_items = new ArrayList<>();
     }

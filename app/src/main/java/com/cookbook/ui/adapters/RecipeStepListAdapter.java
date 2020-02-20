@@ -17,55 +17,47 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RecipeStepListAdapter extends RecyclerView.Adapter<RecipeStepListAdapter.PantryViewHolder> {
+public class RecipeStepListAdapter extends RecyclerView.Adapter<RecipeStepListAdapter.StepViewHolder> {
 
-    private HashMap<Ingredient, Float> mIngredients;
-    private List<Ingredient> mIngredientsSorted;
+    private List<String> mSteps;
 
-    public RecipeStepListAdapter(HashMap<Ingredient, Float> ingredients) {
-        mIngredients = ingredients;
-        mIngredientsSorted = new ArrayList<> (mIngredients.keySet());
+    public RecipeStepListAdapter(List<String> steps) {
+        this.mSteps = steps;
     }
 
     @NonNull
     @Override
-    public PantryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public StepViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.pantry_ingredient_item, parent, false);
+        View contactView = inflater.inflate(R.layout.recipe_step_item, parent, false);
 
         // Return a new holder instance
-        PantryViewHolder viewHolder = new PantryViewHolder(contactView);
+        StepViewHolder viewHolder = new StepViewHolder(contactView);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PantryViewHolder holder, int position) {
-        Ingredient ingredient = mIngredientsSorted.get(position);
-
-        holder.name.setText(ingredient.getDisplayName());
-        holder.quantity.setText(mIngredients.get(ingredient).toString());
+    public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
+        String displayStep = Integer.toString(position + 1) + ". " + mSteps.get(position);
+        holder.step.setText(displayStep);
     }
 
     @Override
     public int getItemCount() {
-        return mIngredientsSorted.size();
+        return mSteps.size();
     }
 
-    public static class PantryViewHolder extends RecyclerView.ViewHolder {
+    public static class StepViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name;
-        public TextView quantity;
-        public CheckBox checkBox;
+        public TextView step;
 
-        public PantryViewHolder(View view) {
+        public StepViewHolder(View view) {
             super(view);
 
-            name = (TextView) view.findViewById(R.id.pantry_item_name);
-            quantity = (TextView) view.findViewById(R.id.pantry_item_quantity);
-            checkBox = (CheckBox) view.findViewById(R.id.pantry_item_checkbox);
+            step = view.findViewById(R.id.recipe_step);
         }
 
     }

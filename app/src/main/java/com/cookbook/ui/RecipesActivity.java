@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.ui.adapters.RecipeListAdapter;
-import com.cookbook.ui.helpers.ItemClickListener;
+import com.cookbook.ui.helper.ItemClickListener;
 import com.example.cookbook.R;
 import com.cookbook.viewmodel.RecipeListItem;
 

@@ -25,6 +25,14 @@ public class Recipe {
         return ingredients.get(ingredient);
     }
 
+    public HashMap<Ingredient, Float> getIngredients() {
+        return this.ingredients;
+    }
+
+    public List<String> getSteps() {
+        return new ArrayList<String>(this.steps);
+    }
+
     /* Returns true if ingredient was already present (modify), false if ingredient was not (add) */
     public boolean addIngredient(Ingredient ingredient, float quantity) {
         //Change to lowercase to prevent duplicate ingredients with different cases from being added.

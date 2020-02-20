@@ -1,4 +1,4 @@
-package com.cookbook.ui.helpers;
+package com.cookbook.ui.helper;
 
 import android.view.View;
 

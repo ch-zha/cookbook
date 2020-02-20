@@ -10,18 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.viewmodel.MenuCard;
+import com.cookbook.model.MenuDay;
 import com.example.cookbook.R;
 
 import java.util.List;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder> {
 
-    private List<MenuCard> mDays = null;
+    private List<MenuDay> mDays = null;
     private RecyclerView.RecycledViewPool viewPool = null;
 
-    public MenuAdapter(List<MenuCard> menuCards) {
-        mDays = menuCards;
+    public MenuAdapter(List<MenuDay> menuDays) {
+        mDays = menuDays;
         viewPool = new RecyclerView.RecycledViewPool();
     }
 
@@ -42,7 +42,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-        MenuCard day = mDays.get(position);
+        MenuDay day = mDays.get(position);
 
         holder.name.setText(day.getDayName());
         holder.mealListRv.setAdapter(new MealListAdapter(day.getMeals()));

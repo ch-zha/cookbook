@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.ui.helpers.ItemClickListener;
+import com.cookbook.ui.helper.ItemClickListener;
 import com.example.cookbook.R;
 import com.cookbook.viewmodel.RecipeListItem;
 
