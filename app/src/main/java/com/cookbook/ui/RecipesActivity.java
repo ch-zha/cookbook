@@ -63,9 +63,9 @@ public class RecipesActivity extends AppCompatActivity implements ItemClickListe
     }
 
     @Override
-    public void onClick(View view, String hash) {
+    public void onClick(View view, String id) {
         Intent goToRecipe = new Intent(view.getContext(), ViewRecipeActivity.class);
-        goToRecipe.putExtra("recipe_hash", hash);
+        goToRecipe.putExtra("recipe_id", id);
         startActivity(goToRecipe);
     }
 }

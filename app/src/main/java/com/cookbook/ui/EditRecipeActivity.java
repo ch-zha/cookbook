@@ -3,7 +3,6 @@ package com.cookbook.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,19 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.model.Ingredient;
 import com.cookbook.model.Recipe;
+import com.cookbook.ui.adapters.EditRecipeIngredientListAdapter;
+import com.cookbook.ui.adapters.EditRecipeStepListAdapter;
 import com.cookbook.ui.adapters.RecipeIngredientListAdapter;
 import com.cookbook.ui.adapters.RecipeStepListAdapter;
 import com.example.cookbook.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ViewRecipeActivity extends AppCompatActivity {
+public class EditRecipeActivity extends AppCompatActivity {
 
     private Recipe mRecipe = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_recipe_main);
+        setContentView(R.layout.edit_recipe_main);
 
         // Get recipe instance
         Intent intent = getIntent();
@@ -38,7 +38,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
             this.mRecipe = new Recipe(" ");
             //TODO error handling
         }
-        final String recipe_id_to_pass = recipe_id;
 
         // Set toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.edit_recipe_toolbar);
@@ -48,26 +47,14 @@ public class ViewRecipeActivity extends AppCompatActivity {
         // Find recyclerview
         RecyclerView rv_ingredients = (RecyclerView) findViewById(R.id.rv_recipe_ingredients);
         // Create and set adapter/layoutmanager
-        rv_ingredients.setAdapter(new RecipeIngredientListAdapter(mRecipe.getIngredients()));
+        rv_ingredients.setAdapter(new EditRecipeIngredientListAdapter(mRecipe.getIngredients()));
         rv_ingredients.setLayoutManager(new LinearLayoutManager(this));
 
         // Find recyclerview
         RecyclerView rv_steps = (RecyclerView) findViewById(R.id.rv_recipe_steps);
         // Create and set adapter/layoutmanager
-        rv_steps.setAdapter(new RecipeStepListAdapter(mRecipe.getSteps()));
+        rv_steps.setAdapter(new EditRecipeStepListAdapter(mRecipe.getSteps()));
         rv_steps.setLayoutManager(new LinearLayoutManager(this));
-
-        // Set up FAB
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent editRecipe = new Intent(view.getContext(), EditRecipeActivity.class);
-                editRecipe.putExtra("recipe_id", recipe_id_to_pass);
-                startActivity(editRecipe);
-//                overridePendingTransition(R.anim.slide_up, R.anim.no_anim);
-            }
-        });
     }
 //
 //    @Override
