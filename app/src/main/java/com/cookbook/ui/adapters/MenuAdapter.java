@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.model.MenuDay;
+import com.cookbook.viewmodel.MenuDay;
 import com.example.cookbook.R;
 
 import java.util.List;

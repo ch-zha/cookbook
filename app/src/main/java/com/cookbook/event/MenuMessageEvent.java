@@ -1,6 +1,6 @@
 package com.cookbook.event;
 
-import com.cookbook.model.MenuDay;
+import com.cookbook.viewmodel.MenuDay;
 
 import java.util.List;
 

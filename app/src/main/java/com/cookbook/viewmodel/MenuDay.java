@@ -1,4 +1,4 @@
-package com.cookbook.model;
+package com.cookbook.viewmodel;
 
 import com.cookbook.viewmodel.RecipeListItem;
 

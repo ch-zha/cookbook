@@ -1,4 +1,4 @@
-package com.cookbook.model;
+package com.cookbook.viewmodel;
 
 import java.util.ArrayList;
 import java.util.HashMap;

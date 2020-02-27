@@ -1,6 +1,5 @@
 package com.cookbook.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.content.DataManagerService;
 import com.cookbook.event.MenuMessageEvent;
 import com.cookbook.ui.adapters.MenuAdapter;
-import com.cookbook.model.MenuDay;
+import com.cookbook.viewmodel.MenuDay;
 import com.example.cookbook.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -24,7 +22,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class MenuFragment extends Fragment {
 

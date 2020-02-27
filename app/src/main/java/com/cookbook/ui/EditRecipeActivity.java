@@ -11,12 +11,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.model.Ingredient;
-import com.cookbook.model.Recipe;
+import com.cookbook.viewmodel.Recipe;
 import com.cookbook.ui.adapters.EditRecipeIngredientListAdapter;
 import com.cookbook.ui.adapters.EditRecipeStepListAdapter;
-import com.cookbook.ui.adapters.RecipeIngredientListAdapter;
-import com.cookbook.ui.adapters.RecipeStepListAdapter;
 import com.example.cookbook.R;
 
 public class EditRecipeActivity extends AppCompatActivity {
@@ -30,14 +27,9 @@ public class EditRecipeActivity extends AppCompatActivity {
 
         // Get recipe instance
         Intent intent = getIntent();
-        String recipe_id = null;
-        if (intent.hasExtra("recipe_id")) {
-            recipe_id = intent.getStringExtra("recipe_id");
-            this.mRecipe = buildSampleRecipe(recipe_id);
-        } else {
-            this.mRecipe = new Recipe(" ");
-            //TODO error handling
-        }
+        int recipe_id;
+        recipe_id = intent.getIntExtra("recipe_id", -1);
+//        RequestRecipeEvent.sendRecipeRequest(recipe_id);
 
         // Set toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.edit_recipe_toolbar);
@@ -73,19 +65,5 @@ public class EditRecipeActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private Recipe buildSampleRecipe(String hash) {
-        Recipe recipe = new Recipe(hash);
-
-        recipe.addIngredient(new Ingredient("Ingredient 1"), 2);
-        recipe.addIngredient(new Ingredient("Ingredient 2"), 4);
-        recipe.addIngredient(new Ingredient("Ingredient 3"), 1);
-
-        recipe.addStep("Do something here");
-        recipe.addStep("Do something else here");
-        recipe.addStep("Do yet another thing here");
-
-        return recipe;
     }
 }

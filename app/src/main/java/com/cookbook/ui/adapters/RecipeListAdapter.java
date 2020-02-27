@@ -71,7 +71,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         @Override
         public void onClick(View v) {
             RecipeListItem clicked = mRecipes.get(getAdapterPosition());
-            clickListener.onClick(v, clicked.getName());
+            //TODO replace with real id#
+            clickListener.onClick(v, getAdapterPosition());
         }
     }
 }

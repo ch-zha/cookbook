@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cookbook.data.RecipeDatabase;
 import com.cookbook.ui.adapters.RecipeListAdapter;
 import com.cookbook.ui.helper.ItemClickListener;
 import com.example.cookbook.R;
@@ -31,6 +32,9 @@ public class RecipesActivity extends AppCompatActivity implements ItemClickListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.recipes_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.recipes_title);
+
+        // Initialize DB
+        RecipeDatabase db = RecipeDatabase.getInstance(this);
 
         // Create sample recipe list
         List<RecipeListItem> recipes = RecipeListItem.createSampleRecipeList();
@@ -63,7 +67,7 @@ public class RecipesActivity extends AppCompatActivity implements ItemClickListe
     }
 
     @Override
-    public void onClick(View view, String id) {
+    public void onClick(View view, int id) {
         Intent goToRecipe = new Intent(view.getContext(), ViewRecipeActivity.class);
         goToRecipe.putExtra("recipe_id", id);
         startActivity(goToRecipe);

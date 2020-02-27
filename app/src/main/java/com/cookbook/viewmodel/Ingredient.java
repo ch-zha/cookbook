@@ -1,7 +1,8 @@
-package com.cookbook.model;
+package com.cookbook.viewmodel;
 
 public class Ingredient {
 
+    //TODO take this out and use the version in model
     public enum Measurement {
         Whole,
         Gram,
