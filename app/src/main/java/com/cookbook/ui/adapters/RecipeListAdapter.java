@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cookbook.data.entities.Recipe;
 import com.cookbook.ui.helper.ItemClickListener;
 import com.example.cookbook.R;
 import com.cookbook.viewmodel.RecipeListItem;
@@ -19,12 +20,19 @@ import java.util.List;
 
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
 
-    private List<RecipeListItem> mRecipes;
+    private List<Recipe> mRecipes;
     private ItemClickListener clickListener = null;
 
-    public RecipeListAdapter(List<RecipeListItem> recipes, ItemClickListener clickListener) {
+    public RecipeListAdapter(List<Recipe> recipes, ItemClickListener clickListener) {
         this.mRecipes = recipes;
         this.clickListener = clickListener;
+    }
+
+    public void updateList(List<Recipe> recipes) {
+        this.mRecipes = recipes;
+        synchronized (this) {
+            notify();
+        }
     }
 
     @NonNull
@@ -43,7 +51,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
-        RecipeListItem recipe = mRecipes.get(position);
+        Recipe recipe = mRecipes.get(position);
 
         holder.name.setText(recipe.getName());
         holder.icon.setImageDrawable(ContextCompat.getDrawable(holder.icon.getContext(), R.drawable.ic_launcher_background));
@@ -70,9 +78,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         @Override
         public void onClick(View v) {
-            RecipeListItem clicked = mRecipes.get(getAdapterPosition());
-            //TODO replace with real id#
-            clickListener.onClick(v, getAdapterPosition());
+            Recipe clicked = mRecipes.get(getAdapterPosition());
+            clickListener.onClick(v, clicked.getId());
         }
     }
 }

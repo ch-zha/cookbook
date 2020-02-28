@@ -10,18 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.data.RecipeDatabase;
+import com.cookbook.data.entities.Recipe;
 import com.cookbook.ui.adapters.RecipeListAdapter;
 import com.cookbook.ui.helper.ItemClickListener;
+import com.cookbook.viewmodel.RecipeListViewModel;
 import com.example.cookbook.R;
-import com.cookbook.viewmodel.RecipeListItem;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class RecipesActivity extends AppCompatActivity implements ItemClickListener {
+
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,18 +36,16 @@ public class RecipesActivity extends AppCompatActivity implements ItemClickListe
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.recipes_title);
 
-        // Initialize DB
-        RecipeDatabase db = RecipeDatabase.getInstance(this);
-
-        // Create sample recipe list
-        List<RecipeListItem> recipes = RecipeListItem.createSampleRecipeList();
-
-        // Find recyclerview
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recipes_list);
-        // Create and set adapter/layoutmanager
-        RecipeListAdapter adapter = new RecipeListAdapter(recipes, this);
-        recyclerView.setAdapter(adapter);
+        // Create recyclerview
+        recyclerView = (RecyclerView) findViewById(R.id.recipes_list);
+        recyclerView.setAdapter(new RecipeListAdapter(new ArrayList<Recipe>(), this));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Get ViewModel
+        RecipeListViewModel viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+        viewModel.getRecipeList().observe(this, (recipeList) -> {
+            ((RecipeListAdapter) recyclerView.getAdapter()).updateList(recipeList);
+        });
 
     }
 
