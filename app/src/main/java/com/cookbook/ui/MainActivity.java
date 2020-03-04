@@ -4,10 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.cookbook.content.DataManagerService;
+import com.cookbook.data.RecipeDao;
+import com.cookbook.data.RecipeDatabase;
+import com.cookbook.data.Repository;
 import com.cookbook.ui.adapters.SectionsPagerAdapter;
+import com.cookbook.viewmodel.viewmodel.RecipeListViewModel;
 import com.example.cookbook.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,16 +22,11 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity {
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        // Start up DataManagerService
-        startService(new Intent(this, DataManagerService.class));
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RecipeListViewModel viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
 
         // Set up tabs
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());

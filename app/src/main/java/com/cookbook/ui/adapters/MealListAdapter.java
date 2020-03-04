@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cookbook.data.entities.Meal;
+import com.cookbook.data.entities.Recipe;
 import com.cookbook.viewmodel.RecipeListItem;
 import com.example.cookbook.R;
 
@@ -18,9 +20,9 @@ import java.util.List;
 
 public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealViewHolder> {
 
-    private List<RecipeListItem> mMeals;
+    private List<Meal> mMeals;
 
-    public MealListAdapter(List<RecipeListItem> meals) {
+    public MealListAdapter(List<Meal> meals) {
         mMeals = meals;
     }
 
@@ -38,11 +40,17 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
         return viewHolder;
     }
 
+    public void updateList(List<Meal> meals) {
+        this.mMeals = meals;
+        synchronized (this) {
+            notify();
+        }
+    }
+
     @Override
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
-        RecipeListItem recipe = mMeals.get(position);
 
-        holder.name.setText(recipe.getName());
+        holder.name.setText(Integer.toString(mMeals.get(position).getRecipeId())); //TODO replace with name lookup
     }
 
     @Override

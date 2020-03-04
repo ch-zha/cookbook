@@ -15,7 +15,7 @@ public class Step {
     @ColumnInfo(name = "recipe_id")
     private final int recipeId;
 
-    @ColumnInfo(name = "step_no")
+    @ColumnInfo(name = "step_no", defaultValue = "1")
     private final int stepNo;
 
     private final String instructions;

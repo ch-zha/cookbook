@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PantryListAdapter extends RecyclerView.Adapter<PantryListAdapter.PantryViewHolder> {
+public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.PantryViewHolder> {
 
     private HashMap<Ingredient, Float> mIngredients;
     private List<Ingredient> mIngredientsSorted;
 
-    public PantryListAdapter(HashMap<Ingredient, Float> ingredients) {
+    public ShoppingListAdapter(HashMap<Ingredient, Float> ingredients) {
         mIngredients = ingredients;
         mIngredientsSorted = new ArrayList<> (mIngredients.keySet());
     }

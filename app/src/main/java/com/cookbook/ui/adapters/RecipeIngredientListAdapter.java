@@ -9,7 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.viewmodel.Ingredient;
+import com.cookbook.data.entities.Ingredient;
+import com.cookbook.data.entities.Recipe;
 import com.example.cookbook.R;
 
 import java.util.ArrayList;
@@ -18,12 +19,17 @@ import java.util.List;
 
 public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngredientListAdapter.IngredientViewHolder> {
 
-    private HashMap<Ingredient, Float> mIngredients;
-    private List<Ingredient> mIngredientsSorted;
+    private List<Ingredient> mIngredients;
 
-    public RecipeIngredientListAdapter(HashMap<Ingredient, Float> ingredients) {
+    public RecipeIngredientListAdapter(List<Ingredient> ingredients) {
         mIngredients = ingredients;
-        mIngredientsSorted = new ArrayList<> (mIngredients.keySet());
+    }
+
+    public void updateList(List<Ingredient> ingredients) {
+        this.mIngredients = ingredients;
+        synchronized (this) {
+            notify();
+        }
     }
 
     @NonNull
@@ -42,15 +48,15 @@ public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngr
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
-        Ingredient ingredient = mIngredientsSorted.get(position);
+        Ingredient ingredient = mIngredients.get(position);
 
-        holder.name.setText(ingredient.getDisplayName());
-        holder.quantity.setText(mIngredients.get(ingredient).toString());
+        holder.name.setText(ingredient.getName());
+        holder.quantity.setText(Double.toString(ingredient.getQuantity()));
     }
 
     @Override
     public int getItemCount() {
-        return mIngredientsSorted.size();
+        return mIngredients.size();
     }
 
     public static class IngredientViewHolder extends RecyclerView.ViewHolder {

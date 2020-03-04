@@ -9,24 +9,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.event.RecipeMessageEvent;
-import com.cookbook.event.RequestRecipeEvent;
-import com.cookbook.viewmodel.Recipe;
 import com.cookbook.ui.adapters.RecipeIngredientListAdapter;
 import com.cookbook.ui.adapters.RecipeStepListAdapter;
+import com.cookbook.viewmodel.viewmodel.RecipeDetailViewModel;
 import com.example.cookbook.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import java.util.ArrayList;
 
 public class ViewRecipeActivity extends AppCompatActivity {
 
-    private Recipe mRecipe = null;
     private RecyclerView rv_ingredients = null;
     private RecyclerView rv_steps = null;
 
@@ -34,22 +30,37 @@ public class ViewRecipeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_recipe_main);
-        EventBus.getDefault().register(this);
 
-        // Set toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_recipe_toolbar);
-        setSupportActionBar(toolbar);
+        // Get recipe instance (default value is -1)
+        Intent intent = getIntent();
+        int recipe_id = intent.getIntExtra("recipe_id", -1);
+        String recipe_name = intent.getStringExtra("recipe_name");
 
         // Find recyclerviews
         rv_ingredients = (RecyclerView) findViewById(R.id.rv_recipe_ingredients);
         rv_steps = (RecyclerView) findViewById(R.id.rv_recipe_steps);
 
-        // Get recipe instance (default value is -1)
-        Intent intent = getIntent();
-        int recipe_id = -1;
-        recipe_id = intent.getIntExtra("recipe_id", -1);
-        sendRecipeRequest(recipe_id);
-        final int recipe_id_to_pass = recipe_id;
+        // Create and set adapter/layoutmanager
+        rv_ingredients.setAdapter(new RecipeIngredientListAdapter(new ArrayList<>()));
+        rv_ingredients.setLayoutManager(new LinearLayoutManager(this));
+        // Create and set adapter/layoutmanager
+        rv_steps.setAdapter(new RecipeStepListAdapter(new ArrayList<>()));
+        rv_steps.setLayoutManager(new LinearLayoutManager(this));
+        // Set viewmodel
+        RecipeDetailViewModel viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
+        viewModel.setRecipeId(recipe_id);
+        viewModel.getIngredients().observe(this, (ingredients -> {
+            ((RecipeIngredientListAdapter) rv_ingredients.getAdapter()).updateList(ingredients);
+        }));
+        viewModel.getSteps().observe(this, (steps -> {
+            ((RecipeStepListAdapter) rv_steps.getAdapter()).updateList(steps);
+        }));
+
+        // Set toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_recipe_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(recipe_name);
+
 
         // Set up FAB
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -57,7 +68,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent editRecipe = new Intent(view.getContext(), EditRecipeActivity.class);
-                editRecipe.putExtra("recipe_id", recipe_id_to_pass);
+                editRecipe.putExtra("recipe_id", recipe_id);
+                editRecipe.putExtra("recipe_name", recipe_name);
                 startActivity(editRecipe);
 //                overridePendingTransition(R.anim.slide_up, R.anim.no_anim);
             }
@@ -82,24 +94,4 @@ public class ViewRecipeActivity extends AppCompatActivity {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(RecipeMessageEvent event) {
-
-        this.mRecipe = event.recipe;
-        System.out.println("Received recipe: " + mRecipe.getName());
-        //Set toolbar name
-        getSupportActionBar().setTitle(mRecipe.getName());
-        // Create and set adapter/layoutmanager
-        rv_ingredients.setAdapter(new RecipeIngredientListAdapter(mRecipe.getIngredients()));
-        rv_ingredients.setLayoutManager(new LinearLayoutManager(this));
-        // Create and set adapter/layoutmanager
-        rv_steps.setAdapter(new RecipeStepListAdapter(mRecipe.getSteps()));
-        rv_steps.setLayoutManager(new LinearLayoutManager(this));
-
-    }
-
-    public void sendRecipeRequest(int id) {
-        System.out.println("Sending recipe request");
-        EventBus.getDefault().post(new RequestRecipeEvent(id));
-    }
 }

@@ -1,4 +1,4 @@
-package com.cookbook.viewmodel;
+package com.cookbook.viewmodel.livedata;
 
 import androidx.lifecycle.LiveData;
 
@@ -42,7 +42,7 @@ public class RecipeListLiveData extends LiveData<List<com.cookbook.data.entities
         }
 
         @Override
-        public List<Recipe> call() throws Exception {
+        public List<Recipe> call() {
             liveData.getRepository().repopulate();
             List<Recipe> recipes = liveData.getRepository().getAllRecipes();
             return recipes;

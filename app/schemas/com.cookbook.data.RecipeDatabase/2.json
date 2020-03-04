@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "94caa3988d24ca4a2fc850c579b56405",
+    "version": 2,
+    "identityHash": "ee6d0c5cfc0727f40a5470309a17d649",
     "entities": [
       {
         "tableName": "recipes",
@@ -83,7 +83,7 @@
       },
       {
         "tableName": "steps",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`recipe_id` INTEGER NOT NULL, `step_no` INTEGER NOT NULL, `instructions` TEXT, PRIMARY KEY(`recipe_id`, `step_no`), FOREIGN KEY(`recipe_id`) REFERENCES `recipes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`recipe_id` INTEGER NOT NULL, `step_no` INTEGER NOT NULL DEFAULT 1, `instructions` TEXT, PRIMARY KEY(`recipe_id`, `step_no`), FOREIGN KEY(`recipe_id`) REFERENCES `recipes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "recipeId",
@@ -95,7 +95,8 @@
             "fieldPath": "stepNo",
             "columnName": "step_no",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "1"
           },
           {
             "fieldPath": "instructions",
@@ -130,7 +131,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '94caa3988d24ca4a2fc850c579b56405')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ee6d0c5cfc0727f40a5470309a17d649')"
     ]
   }
 }

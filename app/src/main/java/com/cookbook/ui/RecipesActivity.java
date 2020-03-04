@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cookbook.data.entities.Recipe;
 import com.cookbook.ui.adapters.RecipeListAdapter;
 import com.cookbook.ui.helper.ItemClickListener;
-import com.cookbook.viewmodel.RecipeListViewModel;
+import com.cookbook.viewmodel.viewmodel.RecipeListViewModel;
 import com.example.cookbook.R;
 
 import java.util.ArrayList;
@@ -68,9 +68,10 @@ public class RecipesActivity extends AppCompatActivity implements ItemClickListe
     }
 
     @Override
-    public void onClick(View view, int id) {
+    public void onClick(View view, int id, String name) {
         Intent goToRecipe = new Intent(view.getContext(), ViewRecipeActivity.class);
         goToRecipe.putExtra("recipe_id", id);
+        goToRecipe.putExtra("recipe_name", name);
         startActivity(goToRecipe);
     }
 }

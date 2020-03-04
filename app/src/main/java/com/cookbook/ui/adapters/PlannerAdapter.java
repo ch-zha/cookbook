@@ -1,5 +1,6 @@
 package com.cookbook.ui.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,18 +11,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cookbook.ui.MainActivity;
+import com.cookbook.ui.PlannerFragment;
 import com.cookbook.viewmodel.MenuDay;
+import com.cookbook.viewmodel.livedata.PlannerLiveData;
 import com.example.cookbook.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder> {
+public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.MenuViewHolder> {
 
-    private List<MenuDay> mDays = null;
+    private List<PlannerLiveData> mDays = null;
     private RecyclerView.RecycledViewPool viewPool = null;
+    private String[] dayNames = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}; //TODO make this generated
 
-    public MenuAdapter(List<MenuDay> menuDays) {
-        mDays = menuDays;
+    public PlannerAdapter(List<PlannerLiveData> planner_days) {
+        mDays = planner_days;
         viewPool = new RecyclerView.RecycledViewPool();
     }
 
@@ -42,11 +48,10 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
-        MenuDay day = mDays.get(position);
+        PlannerLiveData day = mDays.get(position);
 
-        holder.name.setText(day.getDayName());
-        holder.mealListRv.setAdapter(new MealListAdapter(day.getMeals()));
-        holder.mealListRv.setLayoutManager(new LinearLayoutManager(holder.mealListRv.getContext()));
+        holder.name.setText(dayNames[position]);
+        ((MealListAdapter) holder.mealListRv.getAdapter()).updateList(mDays.get(position).getValue()); //TODO figure out how to get observe working
     }
 
     @Override
@@ -64,6 +69,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
 
             name = (TextView) view.findViewById(R.id.menu_recipe_name);
             mealListRv = (RecyclerView) view.findViewById(R.id.rv_menu_card_meals);
+            mealListRv.setAdapter(new MealListAdapter(new ArrayList<>()));
+            mealListRv.setLayoutManager(new LinearLayoutManager(mealListRv.getContext()));
         }
 
     }

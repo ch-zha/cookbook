@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.viewmodel.Ingredient;
-import com.cookbook.ui.adapters.PantryListAdapter;
+import com.cookbook.ui.adapters.ShoppingListAdapter;
 import com.example.cookbook.R;
 
 import java.util.HashMap;
 
-public class PantryFragment extends Fragment {
+public class ShoppingListFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class PantryFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_pantry, container, false);
 
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.rv_pantry_ingredients);
-        recyclerView.setAdapter(new PantryListAdapter(createSampleIngredientList()));
+        recyclerView.setAdapter(new ShoppingListAdapter(createSampleIngredientList()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         return root;
     }

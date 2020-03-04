@@ -7,8 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.cookbook.ui.MenuFragment;
-import com.cookbook.ui.PantryFragment;
+import com.cookbook.ui.PlannerFragment;
+import com.cookbook.ui.ShoppingListFragment;
 import com.example.cookbook.R;
 
 /**
@@ -31,9 +31,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
         if (position == 0) {
-            return new MenuFragment();
+            return new PlannerFragment();
         }
-        return new PantryFragment();
+        return new ShoppingListFragment();
     }
 
     @Nullable
