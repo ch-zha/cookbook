@@ -8,12 +8,13 @@
 
     <EditText
         android:id="@+id/recipe_step"
-        android:inputType="textMultiLine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5sp"
         style="@style/TextAppearance.AppCompat.Body1"
-        android:text="Next step..."
+        android:hint="Next step..."
+        android:inputType="text"
+        android:imeOptions="actionDone"
         />
 
 </LinearLayout>

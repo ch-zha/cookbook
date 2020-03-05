@@ -1,4 +1,4 @@
-package com.cookbook.ui.adapters;
+package com.cookbook.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,15 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cookbook.data.entity.Step;
 import com.example.cookbook.R;
 
 import java.util.List;
 
-public class EditRecipeStepListAdapter extends RecyclerView.Adapter<EditRecipeStepListAdapter.StepViewHolder> {
+public class RecipeStepListAdapter extends RecyclerView.Adapter<RecipeStepListAdapter.StepViewHolder> {
 
-    private List<String> mSteps;
+    private List<Step> mSteps;
 
-    public EditRecipeStepListAdapter(List<String> steps) {
+    public RecipeStepListAdapter(List<Step> steps) {
         this.mSteps = steps;
     }
 
@@ -28,7 +29,7 @@ public class EditRecipeStepListAdapter extends RecyclerView.Adapter<EditRecipeSt
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.edit_recipe_step_item, parent, false);
+        View contactView = inflater.inflate(R.layout.recipe_step_item, parent, false);
 
         // Return a new holder instance
         StepViewHolder viewHolder = new StepViewHolder(contactView);
@@ -37,8 +38,15 @@ public class EditRecipeStepListAdapter extends RecyclerView.Adapter<EditRecipeSt
 
     @Override
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
-        String displayStep = Integer.toString(position + 1) + ". " + mSteps.get(position);
+        String displayStep = Integer.toString(position + 1) + ". " + mSteps.get(position).getInstructions();
         holder.step.setText(displayStep);
+    }
+
+    public void updateList(List<Step> steps) {
+        this.mSteps = steps;
+        synchronized (this) {
+            notifyDataSetChanged();
+        }
     }
 
     @Override

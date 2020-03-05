@@ -1,29 +1,32 @@
-package com.cookbook.ui.adapters;
+package com.cookbook.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.viewmodel.Ingredient;
+import com.cookbook.data.entity.Ingredient;
 import com.example.cookbook.R;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRecipeIngredientListAdapter.IngredientViewHolder> {
+public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngredientListAdapter.IngredientViewHolder> {
 
-    private HashMap<Ingredient, Float> mIngredients;
-    private List<Ingredient> mIngredientsSorted;
+    private List<Ingredient> mIngredients;
 
-    public EditRecipeIngredientListAdapter(HashMap<Ingredient, Float> ingredients) {
+    public RecipeIngredientListAdapter(List<Ingredient> ingredients) {
         mIngredients = ingredients;
-        mIngredientsSorted = new ArrayList<> (mIngredients.keySet());
+    }
+
+    public void updateList(List<Ingredient> ingredients) {
+        this.mIngredients = ingredients;
+        synchronized (this) {
+            notifyDataSetChanged();
+        }
     }
 
     @NonNull
@@ -33,7 +36,7 @@ public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRe
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.edit_recipe_ingredient_item, parent, false);
+        View contactView = inflater.inflate(R.layout.recipe_ingredient_item, parent, false);
 
         // Return a new holder instance
         IngredientViewHolder viewHolder = new IngredientViewHolder(contactView);
@@ -42,21 +45,21 @@ public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRe
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
-        Ingredient ingredient = mIngredientsSorted.get(position);
+        Ingredient ingredient = mIngredients.get(position);
 
-        holder.name.setText(ingredient.getDisplayName());
-        holder.quantity.setText(mIngredients.get(ingredient).toString());
+        holder.name.setText(ingredient.getName());
+        holder.quantity.setText(Double.toString(ingredient.getQuantity()));
     }
 
     @Override
     public int getItemCount() {
-        return mIngredientsSorted.size();
+        return mIngredients.size();
     }
 
     public static class IngredientViewHolder extends RecyclerView.ViewHolder {
 
-        public EditText name;
-        public EditText quantity;
+        public TextView name;
+        public TextView quantity;
 
         public IngredientViewHolder(View view) {
             super(view);

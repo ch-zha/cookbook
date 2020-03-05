@@ -3,11 +3,7 @@ package com.cookbook.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.cookbook.content.DataManagerService;
-import com.cookbook.data.RecipeDao;
-import com.cookbook.data.RecipeDatabase;
-import com.cookbook.data.Repository;
-import com.cookbook.ui.adapters.SectionsPagerAdapter;
+import com.cookbook.ui.adapter.SectionsPagerAdapter;
 import com.cookbook.viewmodel.viewmodel.RecipeListViewModel;
 import com.example.cookbook.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

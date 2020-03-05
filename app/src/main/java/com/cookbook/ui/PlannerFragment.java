@@ -12,14 +12,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.ui.adapters.MealListAdapter;
-import com.cookbook.ui.adapters.PlannerAdapter;
-import com.cookbook.viewmodel.MenuDay;
+import com.cookbook.ui.adapter.PlannerAdapter;
 import com.cookbook.viewmodel.viewmodel.PlannerViewModel;
 import com.example.cookbook.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlannerFragment extends Fragment {
 
@@ -38,7 +33,7 @@ public class PlannerFragment extends Fragment {
         PlannerViewModel viewModel = ViewModelProviders.of(this).get(PlannerViewModel.class);
 
         this.recyclerView = root.findViewById(R.id.rv_menu_cards);
-        this.recyclerView.setAdapter(new PlannerAdapter(viewModel.getPlanner()));
+        this.recyclerView.setAdapter(new PlannerAdapter(viewModel.getPlanner(), this));
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return root;
     }

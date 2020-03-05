@@ -1,19 +1,18 @@
-package com.cookbook.ui.adapters;
+package com.cookbook.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.data.entities.Meal;
-import com.cookbook.data.entities.Recipe;
-import com.cookbook.viewmodel.RecipeListItem;
+import com.cookbook.data.entity.Meal;
+import com.cookbook.viewmodel.viewmodel.PlannerViewModel;
 import com.example.cookbook.R;
 
 import java.util.List;
@@ -21,9 +20,13 @@ import java.util.List;
 public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealViewHolder> {
 
     private List<Meal> mMeals;
+    private PlannerViewModel viewModel;
+    private Fragment owner;
 
-    public MealListAdapter(List<Meal> meals) {
+    MealListAdapter(List<Meal> meals, Fragment owner) {
         mMeals = meals;
+        this.owner = owner;
+        this.viewModel = ViewModelProviders.of(owner).get(PlannerViewModel.class);
     }
 
     @NonNull
@@ -36,21 +39,24 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
         View contactView = inflater.inflate(R.layout.menu_meal_item, parent, false);
 
         // Return a new holder instance
-        MealViewHolder viewHolder = new MealViewHolder(contactView);
-        return viewHolder;
+        return new MealViewHolder(contactView);
     }
 
     public void updateList(List<Meal> meals) {
         this.mMeals = meals;
         synchronized (this) {
-            notify();
+            notifyDataSetChanged();
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
 
-        holder.name.setText(Integer.toString(mMeals.get(position).getRecipeId())); //TODO replace with name lookup
+        int recipe_id = mMeals.get(position).getRecipeId();
+        viewModel.getRecipeName(recipe_id).observe(owner, name -> {
+            holder.name.setText(name);
+        });
+
     }
 
     @Override
@@ -60,7 +66,8 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
 
     public static class MealViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name;
+        private TextView name;
+        private Fragment owner;
 
         public MealViewHolder(View view) {
             super(view);

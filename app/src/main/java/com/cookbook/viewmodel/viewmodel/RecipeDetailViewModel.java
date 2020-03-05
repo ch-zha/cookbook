@@ -4,20 +4,23 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.cookbook.data.RecipeDao;
 import com.cookbook.data.RecipeDatabase;
 import com.cookbook.data.Repository;
-import com.cookbook.viewmodel.livedata.RecipeIngredientsLiveData;
-import com.cookbook.viewmodel.livedata.RecipeStepsLiveData;
+import com.cookbook.data.entity.Ingredient;
+import com.cookbook.data.entity.Step;
+
+import java.util.List;
 
 public class RecipeDetailViewModel extends AndroidViewModel {
 
     Repository repository;
     private int recipeId;
 
-    private RecipeIngredientsLiveData ingredients;
-    private RecipeStepsLiveData steps;
+    private LiveData<List<Ingredient>> ingredients;
+    private LiveData<List<Step>> steps;
 
     public RecipeDetailViewModel(@NonNull Application application) {
         super(application);
@@ -27,15 +30,15 @@ public class RecipeDetailViewModel extends AndroidViewModel {
 
     public void setRecipeId(int id) {
         this.recipeId = id;
-        this.ingredients = new RecipeIngredientsLiveData(repository, recipeId);
-        this.steps = new RecipeStepsLiveData(repository, recipeId);
+        this.ingredients = repository.getIngredientsForRecipe(recipeId);
+        this.steps = repository.getStepsForRecipe(recipeId);
     }
 
-    public RecipeIngredientsLiveData getIngredients() {
+    public LiveData<List<Ingredient>> getIngredients() {
         return this.ingredients;
     }
 
-    public RecipeStepsLiveData getSteps() {
+    public LiveData<List<Step>> getSteps() {
         return this.steps;
     }
 }

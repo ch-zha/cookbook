@@ -8,5 +8,6 @@
     <!-- Edit Recipe Activity -->
     <string name="recipe_ingredients">Ingredients</string>
     <string name="recipe_steps">Steps</string>
+    <string name="default_recipe_name">New Recipe</string>
 
 </resources>

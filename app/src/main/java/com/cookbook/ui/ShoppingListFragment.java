@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.viewmodel.Ingredient;
-import com.cookbook.ui.adapters.ShoppingListAdapter;
+import com.cookbook.ui.adapter.ShoppingListAdapter;
 import com.example.cookbook.R;
 
 import java.util.HashMap;

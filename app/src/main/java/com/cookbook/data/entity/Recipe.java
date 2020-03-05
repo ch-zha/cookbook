@@ -1,4 +1,4 @@
-package com.cookbook.data.entities;
+package com.cookbook.data.entity;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;

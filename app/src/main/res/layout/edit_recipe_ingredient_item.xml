@@ -14,19 +14,22 @@
         android:layout_weight=".9"
         android:padding="5sp"
         style="@style/TextAppearance.AppCompat.Body1"
-        android:text="Ingredient"
+        android:hint="New ingredient..."
+        android:inputType="text"
+        android:imeOptions="actionDone"
         />
 
     <EditText
         android:id="@+id/recipe_ingredient_quantity"
-        android:inputType="numberDecimal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight=".1"
         android:padding="5sp"
         style="@style/TextAppearance.AppCompat.Body1"
-        android:text="0"
+        android:inputType="numberDecimal"
+        android:hint="0"
+        android:imeOptions="actionDone"
         />
 
 </LinearLayout>

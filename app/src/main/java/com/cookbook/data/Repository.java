@@ -1,13 +1,14 @@
 package com.cookbook.data;
 
-import com.cookbook.data.entities.Ingredient;
-import com.cookbook.data.entities.Meal;
-import com.cookbook.data.entities.MeasurementUnit;
-import com.cookbook.data.entities.Recipe;
-import com.cookbook.data.entities.Step;
+import androidx.lifecycle.LiveData;
+
+import com.cookbook.data.entity.Ingredient;
+import com.cookbook.data.entity.Meal;
+import com.cookbook.data.entity.MeasurementUnit;
+import com.cookbook.data.entity.Recipe;
+import com.cookbook.data.entity.Step;
 
 import java.util.List;
-import java.util.Random;
 
 public class Repository {
 
@@ -31,51 +32,57 @@ public class Repository {
         recipeDao.addRecipe(new Recipe("Stir-fried Green Beans"));
     }
 
-    public List<Recipe> getAllRecipes() {
+    public LiveData<List<Recipe>> getAllRecipes() {
         return recipeDao.getAllRecipes();
+    }
+
+    public LiveData<String> getRecipeName(int id) {
+        return recipeDao.getRecipeName(id);
+    }
+
+    public long addRecipe(String name) {
+        return recipeDao.addRecipe(new Recipe(name));
     }
 
     /**** Ingredients Table ****/
 
-    public void fillRecipeWithSampleIngredients(int id) {
-        recipeDao.deleteIngredientsFromRecipe(id);
-        recipeDao.addIngredient(new Ingredient(id, "Ingredient 1", 2, MeasurementUnit.Whole));
-        recipeDao.addIngredient(new Ingredient(id, "Ingredient 2", 250, MeasurementUnit.Gram));
-        recipeDao.addIngredient(new Ingredient(id, "Ingredient 3", 3, MeasurementUnit.TBSP));
+    public LiveData<List<Ingredient>> getIngredientsForRecipe(int id) {
+        return recipeDao.getIngredientsForRecipe(id);
     }
 
-    public List<Ingredient> getIngredientsForRecipe(int id) {
-        return recipeDao.getIngredientsForRecipe(id);
+    public void addIngredient(String name, int recipe_id, double quantity, MeasurementUnit unit) {
+        recipeDao.addIngredient(new Ingredient(recipe_id, name, quantity, unit));
+    }
+
+    public void updateIngredientName(String old_name, String new_name, int recipe_id) {
+        recipeDao.updateIngredientName(recipe_id, old_name, new_name);
+    }
+
+    public void updateIngredientUnit(String ingredient_name, int recipe_id, MeasurementUnit unit) {
+        recipeDao.updateIngredientUnit(recipe_id, ingredient_name, MeasurementUnit.getMeasurementUnitString(unit));
+    }
+
+    public void updateIngredientQuantity(String ingredient_name, int recipe_id, double quantity) {
+        recipeDao.updateIngredientQuantity(recipe_id, ingredient_name, quantity);
     }
 
     /**** Steps Table ****/
 
-    public void fillRecipeWithSampleSteps(int id) {
-        recipeDao.deleteStepsFromRecipe(id);
-        recipeDao.addStepToRecipe(id, "Step 1 is to do something");
-        recipeDao.addStepToRecipe(id, "Step 2 is to do something else");
-        recipeDao.addStepToRecipe(id, "Step 3 is to do a different thing");
+    public LiveData<List<Step>> getStepsForRecipe(int id) {
+        return recipeDao.getStepsForRecipe(id);
     }
 
-    public List<Step> getStepsForRecipe(int id) {
-        return recipeDao.getStepsForRecipe(id);
+    public void updateStep(int step_id, String instructions) {
+        recipeDao.updateStep(instructions, step_id);
+    }
+
+    public void addStep(String instructions, int recipe_id) {
+        recipeDao.addStepToRecipe(recipe_id, instructions);
     }
 
     /**** Planner Table ****/
 
-    public void createSamplePlannerForDay(int day) {
-
-        List<Recipe> recipes = getAllRecipes();
-        if (recipes.size() < 1) return;
-
-        recipeDao.clearDayInPlanner(day);
-        Random rand = new Random();
-        recipeDao.addMealToDay(day, recipes.get(rand.nextInt(recipes.size())).getId());
-        recipeDao.addMealToDay(day, recipes.get(rand.nextInt(recipes.size())).getId());
-
-    }
-
-    public List<Meal> getMealsForDay(int day) {
+    public LiveData<List<Meal>> getMealsForDay(int day) {
         return recipeDao.getMealsForDay(day);
     }
 

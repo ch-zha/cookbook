@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.ui.adapters.RecipeIngredientListAdapter;
-import com.cookbook.ui.adapters.RecipeStepListAdapter;
+import com.cookbook.ui.adapter.RecipeIngredientListAdapter;
+import com.cookbook.ui.adapter.RecipeStepListAdapter;
 import com.cookbook.viewmodel.viewmodel.RecipeDetailViewModel;
 import com.example.cookbook.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -57,7 +57,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         }));
 
         // Set toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_recipe_toolbar);
+        Toolbar toolbar = findViewById(R.id.edit_recipe_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(recipe_name);
 

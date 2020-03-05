@@ -1,4 +1,4 @@
-package com.cookbook.ui.adapters;
+package com.cookbook.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,10 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.data.entities.Recipe;
-import com.cookbook.ui.helper.ItemClickListener;
+import com.cookbook.data.entity.Recipe;
+import com.cookbook.ui.listener.ItemClickListener;
 import com.example.cookbook.R;
-import com.cookbook.viewmodel.RecipeListItem;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     public void updateList(List<Recipe> recipes) {
         this.mRecipes = recipes;
         synchronized (this) {
-            notify();
+            notifyDataSetChanged();
         }
     }
 

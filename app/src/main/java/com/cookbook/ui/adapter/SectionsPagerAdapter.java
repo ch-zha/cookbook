@@ -1,4 +1,4 @@
-package com.cookbook.ui.adapters;
+package com.cookbook.ui.adapter;
 
 import android.content.Context;
 import androidx.annotation.Nullable;

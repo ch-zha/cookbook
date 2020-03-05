@@ -6,12 +6,12 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.cookbook.data.entities.Ingredient;
-import com.cookbook.data.entities.Meal;
-import com.cookbook.data.entities.Recipe;
-import com.cookbook.data.entities.Step;
+import com.cookbook.data.entity.Ingredient;
+import com.cookbook.data.entity.Meal;
+import com.cookbook.data.entity.Recipe;
+import com.cookbook.data.entity.Step;
 
-@Database(  version = 4,
+@Database(  version = 5,
             exportSchema = true,
             entities = {Recipe.class, Ingredient.class, Step.class, Meal.class})
 public abstract class RecipeDatabase extends RoomDatabase {
