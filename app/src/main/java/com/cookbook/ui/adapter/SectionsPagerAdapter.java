@@ -17,6 +17,9 @@ import com.example.cookbook.R;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+    private PlannerFragment planner;
+    private ShoppingListFragment shoppingList;
+
     @StringRes
     private static final int[] TAB_TITLES = new int[] {R.string.menu_tab_text, R.string.pantry_tab_text};
     private final Context mContext;
@@ -26,14 +29,20 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         mContext = context;
     }
 
+    public PlannerFragment getPlanner() {
+        return planner;
+    }
+
     @Override
     public Fragment getItem(int position) {
+        System.out.println("get item");
         // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
         if (position == 0) {
-            return new PlannerFragment();
+            this.planner = new PlannerFragment();
+            return planner;
         }
-        return new ShoppingListFragment();
+        shoppingList = new ShoppingListFragment();
+        return shoppingList;
     }
 
     @Nullable

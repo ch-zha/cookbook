@@ -34,7 +34,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.pantry_ingredient_item, parent, false);
+        View contactView = inflater.inflate(R.layout.shoppinglist_ingredient_item, parent, false);
 
         // Return a new holder instance
         PantryViewHolder viewHolder = new PantryViewHolder(contactView);

@@ -17,6 +17,9 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FloatingActionButton fab;
+    private SectionsPagerAdapter sectionsPagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,21 +28,64 @@ public class MainActivity extends AppCompatActivity {
         RecipeListViewModel viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
 
         // Set up tabs
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {}
+
+            /** Exit edit mode if leaving Planner tab **/
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 0) {
+                    sectionsPagerAdapter.getPlanner().exitEditMode();
+                    setFabBehaviorToNormal();
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
 
         // Set up FAB
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent goToRecipes = new Intent(view.getContext(), RecipesActivity.class);
-                startActivity(goToRecipes);
-                overridePendingTransition(R.anim.slide_up, R.anim.no_anim);
-            }
-        });
+        fab = findViewById(R.id.fab);
+        setFabBehaviorToNormal();
+    }
+
+    /** Floating action button exits planner edit mode if editing planner,
+     *  otherwise it opens recipe activity**/
+
+    public void setFabBehaviorToEdit() {
+        fab.setOnClickListener(new FABEditModeBehavior());
+        fab.setImageDrawable(getDrawable(R.drawable.ic_close_24px));
+    }
+
+    public void setFabBehaviorToNormal() {
+        fab.setOnClickListener(new FABNormalBehavior());
+        fab.setImageDrawable(getDrawable(R.drawable.ic_list_24px));
+    }
+
+    class FABNormalBehavior implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            Intent goToRecipes = new Intent(v.getContext(), RecipesActivity.class);
+            startActivity(goToRecipes);
+            overridePendingTransition(R.anim.slide_up, R.anim.no_anim);
+        }
+
+    }
+
+    class FABEditModeBehavior implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            sectionsPagerAdapter.getPlanner().exitEditMode();
+            setFabBehaviorToNormal();
+        }
+
     }
 }

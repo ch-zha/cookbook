@@ -11,8 +11,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5sp"
+        android:layout_gravity="center"
+        android:layout_weight=".8"
         style="@style/TextAppearance.AppCompat.Large"
         android:text="Hello"
         />
+
+    <ImageButton
+        android:id="@+id/clear_entry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight=".2"
+        android:padding="5sp"
+        android:background="#00FFFFFF"
+        android:src="@drawable/ic_close_24px"
+        android:visibility="gone"
+        android:tint="@android:color/darker_gray" />
 
 </LinearLayout>

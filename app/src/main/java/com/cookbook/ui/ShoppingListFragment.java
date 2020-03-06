@@ -27,7 +27,7 @@ public class ShoppingListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_pantry, container, false);
+        View root = inflater.inflate(R.layout.fragment_shoppinglist, container, false);
 
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.rv_pantry_ingredients);
         recyclerView.setAdapter(new ShoppingListAdapter(createSampleIngredientList()));
