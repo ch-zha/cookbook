@@ -16,6 +16,8 @@
     <string name="add_entry_prompt">Add an entry…</string>
     <string name="planner_entry_authority">com.cookbook.provider.plannersuggestion</string>
 
-    <!-- -->
+    <!-- Add Recipe -->
+    <string name="add_recipe_prompt">Enter new recipe name…</string>
+    <string name="new_recipe_authority">com.cookbook.provider.newrecipesuggestion</string>
 
 </resources>
