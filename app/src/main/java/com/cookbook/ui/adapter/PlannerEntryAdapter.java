@@ -123,7 +123,7 @@ public class PlannerEntryAdapter extends RecyclerView.Adapter<PlannerEntryAdapte
                 holder.name.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Note: day gets passed in by clickListener (bubbles up)
+                        //Note: day gets set by clickListener (after bubbling up)
                         clickListener.startSearch(0);
                     }
                 });

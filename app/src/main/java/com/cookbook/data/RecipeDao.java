@@ -86,7 +86,9 @@ public interface RecipeDao {
 
     /**** Planner Table ****/
 
-    @Query("SELECT * FROM planner WHERE day IN (:days)")
+    @Query("SELECT * FROM planner " +
+            "WHERE day IN (:days) " +
+            "ORDER BY day, recipe_id")
     public LiveData<List<Entry>> getMealsForDays(int[] days);
 
     //TODO fix place
