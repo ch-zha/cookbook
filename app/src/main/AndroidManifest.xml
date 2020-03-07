@@ -70,7 +70,12 @@
 
         <provider
             android:authorities="com.cookbook.provider.plannersuggestion"
-            android:name="com.cookbook.viewmodel.PlannerSuggestionProvider"
+            android:name="com.cookbook.data.provider.PlannerSuggestionProvider"
+            android:exported="false">
+        </provider>
+        <provider
+            android:authorities="com.cookbook.provider.newrecipesuggestion"
+            android:name="com.cookbook.data.provider.NewRecipeSuggestionProvider"
             android:exported="false">
         </provider>
     </application>

@@ -1,4 +1,4 @@
-package com.cookbook.viewmodel;
+package com.cookbook.data.provider;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;
@@ -14,9 +14,9 @@ import androidx.annotation.Nullable;
 import com.cookbook.data.RecipeDao;
 import com.cookbook.data.RecipeDatabase;
 
-public class PlannerSuggestionProvider extends ContentProvider {
+public class NewRecipeSuggestionProvider extends ContentProvider {
 
-    public static final String AUTHORITY = "com.cookbook.provider.plannersuggestion";
+    public static final String AUTHORITY = "com.cookbook.provider.newrecipesuggestion";
     public static final int MAX_RESULT_SIZE = 5;
     public static final String[] CURSOR_COLUMNS = new String[] {"_id", SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_INTENT_DATA};
 
@@ -51,7 +51,7 @@ public class PlannerSuggestionProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return "vnd.android.cursor.dir/vnd.com.cookbook.provider.plannersuggestion.recipes";
+        return "vnd.android.cursor.dir/vnd.com.cookbook.provider.newrecipesuggestion.mealdb";
     }
 
     @Nullable
