@@ -3,7 +3,7 @@ package com.cookbook.data;
 import androidx.lifecycle.LiveData;
 
 import com.cookbook.data.entity.Ingredient;
-import com.cookbook.data.entity.Meal;
+import com.cookbook.data.entity.Entry;
 import com.cookbook.data.entity.MeasurementUnit;
 import com.cookbook.data.entity.Recipe;
 import com.cookbook.data.entity.Step;
@@ -82,8 +82,16 @@ public class Repository {
 
     /**** Planner Table ****/
 
-    public LiveData<List<Meal>> getMealsForDay(int day) {
-        return recipeDao.getMealsForDay(day);
+    public LiveData<List<Entry>> getMealsForDays(int[] days) {
+        return recipeDao.getMealsForDays(days);
+    }
+
+    public void addMealToDay(int day, int recipe_id) {
+        recipeDao.addMealToDay(day, recipe_id);
+    }
+
+    public void removeMeal(int meal_id) {
+        recipeDao.removeMeal(meal_id);
     }
 
 }

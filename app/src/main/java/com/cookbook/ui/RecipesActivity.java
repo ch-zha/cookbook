@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Recipe;
 import com.cookbook.ui.adapter.RecipeListAdapter;
-import com.cookbook.ui.listener.ItemClickListener;
+import com.cookbook.ui.listener.RecipeListListener;
 import com.cookbook.viewmodel.service.UpdateRecipeService;
 import com.cookbook.viewmodel.viewmodel.RecipeListViewModel;
 import com.example.cookbook.R;
@@ -27,7 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class RecipesActivity extends AppCompatActivity implements ItemClickListener {
+public class RecipesActivity extends AppCompatActivity implements RecipeListListener {
 
     RecyclerView recyclerView;
 

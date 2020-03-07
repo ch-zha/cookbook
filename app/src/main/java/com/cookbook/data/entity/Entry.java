@@ -7,7 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "planner")
-public class Meal {
+public class Entry {
 
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
@@ -23,7 +23,7 @@ public class Meal {
     @NonNull
     private int recipeId;
 
-    public Meal(int mealId, int day, int place, int recipeId) {
+    public Entry(int mealId, int day, int place, int recipeId) {
         this.mealId = mealId;
         this.day = day;
         this.place = place;
@@ -31,7 +31,7 @@ public class Meal {
     }
 
     @Ignore
-    public Meal(int day, int recipeId) {
+    public Entry(int day, int recipeId) {
         this.day = day;
         this.recipeId = recipeId;
     }

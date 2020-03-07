@@ -35,7 +35,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        System.out.println("get item");
         // getItem is called to instantiate the fragment for the given page.
         if (position == 0) {
             this.planner = new PlannerFragment();

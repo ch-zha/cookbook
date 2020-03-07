@@ -24,9 +24,7 @@ public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngr
 
     public void updateList(List<Ingredient> ingredients) {
         this.mIngredients = ingredients;
-        synchronized (this) {
-            notifyDataSetChanged();
-        }
+        notifyDataSetChanged();
     }
 
     @NonNull

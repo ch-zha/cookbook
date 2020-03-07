@@ -10,4 +10,12 @@
     <string name="recipe_steps">Steps</string>
     <string name="default_recipe_name">New Recipe</string>
 
+    <!-- Planner -->
+    <string name="add_entry_title">New Planner Entry</string>
+    <string name="add_entry_hint">Enter recipe name…</string>
+    <string name="add_entry_prompt">Add an entry…</string>
+    <string name="planner_entry_authority">com.cookbook.provider.plannersuggestion</string>
+
+    <!-- -->
+
 </resources>

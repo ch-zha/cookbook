@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.cookbook.ui.adapter.SectionsPagerAdapter;
+import com.cookbook.viewmodel.service.UpdateIngredientsService;
+import com.cookbook.viewmodel.service.UpdatePlannerService;
 import com.cookbook.viewmodel.viewmodel.RecipeListViewModel;
 import com.example.cookbook.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -53,6 +55,23 @@ public class MainActivity extends AppCompatActivity {
         // Set up FAB
         fab = findViewById(R.id.fab);
         setFabBehaviorToNormal();
+
+    }
+
+    /** Handle adding entry to planner **/
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent != null && intent.getAction().equals(Intent.ACTION_INSERT)) {
+
+            Intent updateDB = new Intent(this, UpdatePlannerService.class);
+            updateDB.putExtra("action", UpdatePlannerService.Action.ADD);
+            updateDB.putExtra("day", sectionsPagerAdapter.getPlanner().getDayToAddEntry());
+            updateDB.putExtra("recipe_id", Integer.valueOf(intent.getDataString()));
+            startService(updateDB);
+
+            sectionsPagerAdapter.getPlanner().dismissAllActiveDialogs();
+
+        }
     }
 
     /** Floating action button exits planner edit mode if editing planner,

@@ -44,9 +44,7 @@ public class EditRecipeStepListAdapter extends RecyclerView.Adapter<EditRecipeSt
 
     public void updateList(List<Step> steps) {
         this.mSteps = steps;
-        synchronized (this) {
-            notifyDataSetChanged();
-        }
+        notifyDataSetChanged();
     }
 
     @Override

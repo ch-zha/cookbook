@@ -1,6 +1,7 @@
 package com.cookbook.ui.adapter;
 
 import android.content.Context;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,23 +10,27 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.data.entity.Meal;
+import com.cookbook.data.entity.Entry;
+import com.cookbook.ui.PlannerFragment;
+import com.cookbook.ui.listener.PlannerEntryListener;
 import com.cookbook.ui.util.EditMode;
 import com.example.cookbook.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.MenuViewHolder> implements EditMode {
 
     private Fragment owner;
-    private List<LiveData<List<Meal>>> mDays = null;
-    private RecyclerView.RecycledViewPool viewPool = null;
+    private List<Entry> mEntries = null;
+    private SparseArray<List<Entry>> mDays = null;
+//    private RecyclerView.RecycledViewPool viewPool = null;
+    private PlannerEntryListener listener;
     private String[] dayNames = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}; //TODO make this generated
 
     private boolean editMode = false;
@@ -35,12 +40,30 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.MenuView
     private final String EXIT_EDIT_MODE = "EXIT_EDIT_MODE";
 
 
-    public PlannerAdapter(List<LiveData<List<Meal>>> planner_days, Fragment owner) {
+    public PlannerAdapter(List<Entry> planner_days, Fragment owner, PlannerEntryListener listener) {
 
         this.owner = owner;
-        this.mDays = planner_days;
-        this.viewPool = new RecyclerView.RecycledViewPool();
+        this.listener = listener;
+        this.mEntries = planner_days;
+        sortEntriesIntoDays();
+//        this.viewPool = new RecyclerView.RecycledViewPool();
 
+    }
+
+    public void updateList(@NonNull List<Entry> entries) {
+        this.mEntries = entries;
+        sortEntriesIntoDays();
+        notifyDataSetChanged();
+    }
+
+    private void sortEntriesIntoDays() {
+        this.mDays = new SparseArray<>();
+        for (int i = 0; i < PlannerFragment.DAYS_DISPLAYED; i++) {
+            mDays.put(i, new ArrayList<Entry>());
+        }
+        for (Entry entry : mEntries) {
+            mDays.get(entry.getDay()).add(entry);
+        }
     }
 
     @Override
@@ -71,7 +94,7 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.MenuView
 
         // Return a new holder instance
         MenuViewHolder viewHolder = new MenuViewHolder(contactView);
-        viewHolder.mealListRv.setRecycledViewPool(viewPool);
+//        viewHolder.mealListRv.setRecycledViewPool(viewPool);
         return viewHolder;
 
     }
@@ -94,13 +117,12 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.MenuView
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
 
-        LiveData<List<Meal>> day = mDays.get(position);
+        List<Entry> day = mDays.get(position);
+        System.out.println("Binding " + dayNames[position]);
 
         holder.name.setText(dayNames[position]);
-        //TODO find if there is way to move callback out of onbind
-        day.observe(owner, meals -> {
-            ((PlannerEntryAdapter) holder.mealListRv.getAdapter()).updateList(meals);
-        });
+        ((PlannerEntryAdapter) holder.mealListRv.getAdapter()).updateList(day);
+
         if (editMode)
             holder.adapter.enterEditMode();
         else
@@ -115,7 +137,7 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.MenuView
 
     }
 
-    class MenuViewHolder extends RecyclerView.ViewHolder implements EditMode {
+    class MenuViewHolder extends RecyclerView.ViewHolder implements EditMode, PlannerEntryListener {
 
         private TextView name;
         private RecyclerView mealListRv;
@@ -125,20 +147,22 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.MenuView
 
             super(view);
             name = (TextView) view.findViewById(R.id.menu_recipe_name);
-            adapter = new PlannerEntryAdapter(new ArrayList<>(), owner);
+            adapter = new PlannerEntryAdapter(new ArrayList<>(), owner, this);
 
             mealListRv = (RecyclerView) view.findViewById(R.id.rv_menu_card_meals);
             mealListRv.setAdapter(adapter);
             mealListRv.setLayoutManager(new LinearLayoutManager(mealListRv.getContext()));
 
-            view.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    System.out.println("Planner on touch");
-                    return false;
-                }
-            });
+        }
 
+        @Override
+        public void onClick(int meal_id) {
+            listener.onClick(meal_id);
+        }
+
+        @Override
+        public void startSearch(int day) {
+            listener.startSearch(getAdapterPosition());
         }
 
         @Override

@@ -1,12 +1,14 @@
 package com.cookbook.data;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.cookbook.data.entity.Entry;
 import com.cookbook.data.entity.Ingredient;
-import com.cookbook.data.entity.Meal;
 import com.cookbook.data.entity.Recipe;
 import com.cookbook.data.entity.Step;
 
@@ -20,6 +22,12 @@ public interface RecipeDao {
     @Query("SELECT * FROM recipes " +
             "ORDER BY name")
     public LiveData<List<Recipe>> getAllRecipes();
+
+    @Query("SELECT name, id " +
+            "FROM recipes " +
+            "WHERE name LIKE :query " +
+            "ORDER BY name")
+    public Cursor getRecipesLike(String query);
 
     @Query("SELECT name from recipes " +
             "WHERE id=:id")
@@ -78,13 +86,17 @@ public interface RecipeDao {
 
     /**** Planner Table ****/
 
-    @Query("SELECT * FROM planner WHERE day = :day")
-    public LiveData<List<Meal>> getMealsForDay(int day);
+    @Query("SELECT * FROM planner WHERE day IN (:days)")
+    public LiveData<List<Entry>> getMealsForDays(int[] days);
 
+    //TODO fix place
     @Query("INSERT INTO planner (day, place, recipe_id) VALUES (:day, " +
             "(SELECT COUNT(place) FROM planner WHERE day = :day)+1, " +
             ":recipe_id)")
     public void addMealToDay(int day, int recipe_id);
+
+    @Query("DELETE FROM planner WHERE id = :meal_id")
+    public void removeMeal(int meal_id);
 
     @Query("DELETE FROM planner WHERE day = :day")
     public void clearDayInPlanner(int day);

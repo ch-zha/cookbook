@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Recipe;
-import com.cookbook.ui.listener.ItemClickListener;
+import com.cookbook.ui.listener.RecipeListListener;
 import com.example.cookbook.R;
 
 import java.util.List;
@@ -20,18 +20,16 @@ import java.util.List;
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
 
     private List<Recipe> mRecipes;
-    private ItemClickListener clickListener = null;
+    private RecipeListListener clickListener = null;
 
-    public RecipeListAdapter(List<Recipe> recipes, ItemClickListener clickListener) {
+    public RecipeListAdapter(List<Recipe> recipes, RecipeListListener clickListener) {
         this.mRecipes = recipes;
         this.clickListener = clickListener;
     }
 
     public void updateList(List<Recipe> recipes) {
         this.mRecipes = recipes;
-        synchronized (this) {
-            notifyDataSetChanged();
-        }
+        notifyDataSetChanged();
     }
 
     @NonNull
