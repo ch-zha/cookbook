@@ -80,6 +80,8 @@ public class EditRecipeStepListAdapter extends RecyclerView.Adapter<EditRecipeSt
             clear = view.findViewById(R.id.clear);
 
             step.setHorizontallyScrolling(false);
+            step.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            step.setRawInputType(EditorInfo.TYPE_CLASS_TEXT);
             step.setOnEditorActionListener(this);
 
 

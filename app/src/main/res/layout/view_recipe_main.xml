@@ -27,9 +27,9 @@
                 android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,6 +48,7 @@
                     android:id="@+id/rv_recipe_ingredients"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
                     android:layout_margin="5sp" />
 
                 <TextView
@@ -61,10 +62,11 @@
                     android:id="@+id/rv_recipe_steps"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
                     android:layout_margin="5sp" />
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 

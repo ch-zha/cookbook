@@ -13,14 +13,11 @@ public class Entry {
     @PrimaryKey(autoGenerate = true)
     private int mealId;
 
-    @NonNull
     private int day;
 
-    @NonNull
     private int place;
 
     @ColumnInfo(name = "recipe_id")
-    @NonNull
     private int recipeId;
 
     public Entry(int mealId, int day, int place, int recipeId) {

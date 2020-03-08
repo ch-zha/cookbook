@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.ViewCompat;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,11 +43,10 @@ public class ViewRecipeActivity extends AppCompatActivity {
         // Create and set adapter/layoutmanager
         rv_ingredients.setAdapter(new RecipeIngredientListAdapter(new ArrayList<>()));
         rv_ingredients.setLayoutManager(new LinearLayoutManager(this));
-        ViewCompat.setNestedScrollingEnabled(rv_ingredients, false);
+
         // Create and set adapter/layoutmanager
         rv_steps.setAdapter(new RecipeStepListAdapter(new ArrayList<>()));
         rv_steps.setLayoutManager(new LinearLayoutManager(this));
-        ViewCompat.setNestedScrollingEnabled(rv_steps, false);
 
         // Set viewmodel
         RecipeDetailViewModel viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);

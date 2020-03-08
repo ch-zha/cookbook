@@ -94,6 +94,13 @@ public class UpdateRecipeService extends IntentService {
             ApiRecipe result = call.execute().body();
             if (result != null) {
 
+                // Check to make sure that names match.
+                // If input recipe name does not match imported
+                // recipe name, only do regular add recipe
+                if (!this.recipe_name.equals(result.getMealName())) {
+                    return repository.addRecipe(recipe_name);
+                }
+
                 //Add recipe to recipes table
                 new_id = Math.toIntExact(repository.addRecipe(result.getMealName()));
                 Log.d("api_result", result.getMealName());

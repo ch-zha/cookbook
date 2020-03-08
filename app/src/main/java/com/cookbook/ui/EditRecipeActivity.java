@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
@@ -39,8 +40,10 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
         // Get recipe instance (default value is -1)
         Intent intent = getIntent();
         recipe_id = intent.getIntExtra("recipe_id", -1);
+        boolean show_warning = intent.getBooleanExtra("show_warning", false);
         String recipe_name = intent.getStringExtra("recipe_name");
-        if (recipe_name == null) recipe_name = getResources().getString(R.string.default_recipe_name); //TODO this case should no longer exist
+        if (recipe_name == null)
+            recipe_name = getResources().getString(R.string.default_recipe_name); //TODO this case should no longer exist
 
         // Set viewmodel
         viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
@@ -64,6 +67,12 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
 
         //Set recipe
         if (recipe_id != -1) setRecipe(recipe_id); //TODO do error handling
+
+        if (show_warning) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Some fields could not be recognized. Please check to see if the information is correct.");
+            builder.show();
+        }
     }
 //
 //    @Override

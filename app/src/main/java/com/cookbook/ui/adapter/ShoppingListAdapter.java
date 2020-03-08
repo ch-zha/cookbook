@@ -10,21 +10,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cookbook.viewmodel.Ingredient;
 import com.cookbook.R;
+import com.cookbook.data.entity.Ingredient;
+import com.cookbook.data.entity.MeasurementUnit;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.PantryViewHolder> {
 
-    private HashMap<Ingredient, Float> mIngredients;
-    private List<Ingredient> mIngredientsSorted;
+    private List<com.cookbook.data.entity.Ingredient> mIngredients;
 
-    public ShoppingListAdapter(HashMap<Ingredient, Float> ingredients) {
+    public ShoppingListAdapter(List<com.cookbook.data.entity.Ingredient> ingredients) {
         mIngredients = ingredients;
-        mIngredientsSorted = new ArrayList<> (mIngredients.keySet());
+    }
+
+    public void updateList(List<Ingredient> ingredients) {
+        this.mIngredients = ingredients;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -37,27 +39,28 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         View contactView = inflater.inflate(R.layout.shoppinglist_ingredient_item, parent, false);
 
         // Return a new holder instance
-        PantryViewHolder viewHolder = new PantryViewHolder(contactView);
-        return viewHolder;
+        return new PantryViewHolder(contactView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PantryViewHolder holder, int position) {
-        Ingredient ingredient = mIngredientsSorted.get(position);
+        Ingredient ingredient = mIngredients.get(position);
 
-        holder.name.setText(ingredient.getDisplayName());
-        holder.quantity.setText(mIngredients.get(ingredient).toString());
+        holder.name.setText(ingredient.getName());
+        holder.quantity.setText(Double.toString(ingredient.getQuantity()));
+        holder.unit.setText(MeasurementUnit.getMeasurementUnitString(ingredient.getUnit()));
     }
 
     @Override
     public int getItemCount() {
-        return mIngredientsSorted.size();
+        return mIngredients.size();
     }
 
     public static class PantryViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name;
         public TextView quantity;
+        public TextView unit;
         public CheckBox checkBox;
 
         public PantryViewHolder(View view) {
@@ -65,6 +68,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
             name = (TextView) view.findViewById(R.id.pantry_item_name);
             quantity = (TextView) view.findViewById(R.id.pantry_item_quantity);
+            unit = (TextView) view.findViewById(R.id.pantry_item_unit);
             checkBox = (CheckBox) view.findViewById(R.id.pantry_item_checkbox);
         }
 

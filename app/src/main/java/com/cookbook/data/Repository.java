@@ -18,6 +18,12 @@ public class Repository {
         this.recipeDao = recipe_dao;
     }
 
+    /**** Get Shopping List ****/
+    public LiveData<List<Ingredient>> getShoppingList() {
+        return recipeDao.getShoppingList();
+    }
+
+
     /**** Recipes Table ****/
 
     public void repopulate() {
