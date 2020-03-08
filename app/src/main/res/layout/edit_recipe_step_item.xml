@@ -4,17 +4,40 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="5sp"
     >
+
+
+    <TextView
+        android:id="@+id/recipe_step_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="5"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:text="1."
+        />
 
     <EditText
         android:id="@+id/recipe_step"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="5sp"
+        android:layout_weight="90"
         style="@style/TextAppearance.AppCompat.Body1"
-        android:hint="Next step..."
+        android:hint="@string/add_step_prompt"
         android:inputType="text"
         android:imeOptions="actionDone"
         />
+
+    <ImageButton
+        android:id="@+id/clear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="5"
+        android:padding="5sp"
+        android:background="#00FFFFFF"
+        android:src="@drawable/ic_close_24px"
+        android:tint="@android:color/darker_gray" />
 
 </LinearLayout>

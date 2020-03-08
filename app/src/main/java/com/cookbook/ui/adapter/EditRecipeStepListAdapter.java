@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Step;
 import com.cookbook.ui.listener.EditStepListener;
-import com.example.cookbook.R;
+import com.cookbook.R;
 
 import java.util.List;
 
@@ -49,9 +50,14 @@ public class EditRecipeStepListAdapter extends RecyclerView.Adapter<EditRecipeSt
 
     @Override
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
+        holder.number.setText((position + 1) + ". ");
         if (position < mSteps.size()) {
-            String displayStep = Integer.toString(position + 1) + ". " + mSteps.get(position).getInstructions();
+            String displayStep = mSteps.get(position).getInstructions();
             holder.step.setText(displayStep);
+            holder.clear.setVisibility(View.VISIBLE);
+        } else {
+            holder.step.getText().clear();
+            holder.clear.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -60,16 +66,25 @@ public class EditRecipeStepListAdapter extends RecyclerView.Adapter<EditRecipeSt
         return mSteps.size() + 1;
     }
 
-    public class StepViewHolder extends RecyclerView.ViewHolder implements TextView.OnEditorActionListener {
+    class StepViewHolder extends RecyclerView.ViewHolder implements TextView.OnEditorActionListener {
 
-        public EditText step;
+        TextView number;
+        EditText step;
+        ImageButton clear;
 
-        public StepViewHolder(View view) {
+        StepViewHolder(View view) {
             super(view);
 
+            number = view.findViewById(R.id.recipe_step_number);
             step = view.findViewById(R.id.recipe_step);
+            clear = view.findViewById(R.id.clear);
+
             step.setHorizontallyScrolling(false);
             step.setOnEditorActionListener(this);
+
+
+            clear.setOnClickListener(v ->
+                    listener.onDeleteStep(mSteps.get(getAdapterPosition()).getStepId()));
         }
 
 

@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Step;
-import com.example.cookbook.R;
+import com.cookbook.R;
 
 import java.util.List;
 
@@ -38,8 +38,9 @@ public class RecipeStepListAdapter extends RecyclerView.Adapter<RecipeStepListAd
 
     @Override
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
-        String displayStep = Integer.toString(position + 1) + ". " + mSteps.get(position).getInstructions();
+        String displayStep = mSteps.get(position).getInstructions();
         holder.step.setText(displayStep);
+        holder.number.setText((position + 1) + ". ");
     }
 
     public void updateList(List<Step> steps) {
@@ -52,13 +53,15 @@ public class RecipeStepListAdapter extends RecyclerView.Adapter<RecipeStepListAd
         return mSteps.size();
     }
 
-    public static class StepViewHolder extends RecyclerView.ViewHolder {
+    class StepViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView step;
+        TextView number;
+        TextView step;
 
-        public StepViewHolder(View view) {
+        StepViewHolder(View view) {
             super(view);
 
+            number = view.findViewById(R.id.recipe_step_number);
             step = view.findViewById(R.id.recipe_step);
         }
 

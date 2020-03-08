@@ -66,6 +66,10 @@ public class Repository {
         recipeDao.updateIngredientQuantity(recipe_id, ingredient_name, quantity);
     }
 
+    public void deleteIngredientFromRecipe(String ingredient_name, int recipe_id) {
+        recipeDao.deleteIngredientFromRecipe(recipe_id, ingredient_name);
+    }
+
     /**** Steps Table ****/
 
     public LiveData<List<Step>> getStepsForRecipe(int id) {
@@ -79,6 +83,11 @@ public class Repository {
     public void addStep(String instructions, int recipe_id) {
         recipeDao.addStepToRecipe(recipe_id, instructions);
     }
+
+    public void deleteStep(int step_id) {
+        recipeDao.deleteStepFromRecipe(step_id);
+    }
+
 
     /**** Planner Table ****/
 

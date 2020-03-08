@@ -6,7 +6,7 @@ public interface EditIngredientListener {
 
     void onAddIngredient(String ingredient_name, double quantity, MeasurementUnit unit);
 
-    void onDeleteIngredient(int ingredient_name);
+    void onDeleteIngredient(String ingredient_name);
 
     void onUpdateIngredientName(String ingredient_name, String new_name);
 

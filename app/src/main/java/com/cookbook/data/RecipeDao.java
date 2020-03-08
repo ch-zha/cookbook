@@ -61,8 +61,8 @@ public interface RecipeDao {
             "WHERE recipe_id=:recipe_id AND name=:ingredient_name")
     public void updateIngredientQuantity(int recipe_id, String ingredient_name, double quantity);
 
-    @Query("DELETE FROM ingredients WHERE recipe_id = :id")
-    public void deleteIngredientsFromRecipe(int id);
+    @Query("DELETE FROM ingredients WHERE recipe_id = :recipe_id AND name = :ingredient_name")
+    public void deleteIngredientFromRecipe(int recipe_id, String ingredient_name);
 
     /**** Steps Table ****/
 
@@ -81,8 +81,8 @@ public interface RecipeDao {
             ":step)")
     public void addStepToRecipe(int id, String step);
 
-    @Query("DELETE FROM steps WHERE recipe_id = :id")
-    public void deleteStepsFromRecipe(int id);
+    @Query("DELETE FROM steps WHERE step_id = :step_id")
+    public void deleteStepFromRecipe(int step_id);
 
     /**** Planner Table ****/
 

@@ -1,30 +1,23 @@
 package com.cookbook.ui.adapter;
 
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Entry;
-import com.cookbook.ui.PlannerFragment;
 import com.cookbook.ui.listener.PlannerEntryListener;
 import com.cookbook.ui.util.EditMode;
-import com.cookbook.viewmodel.service.UpdatePlannerService;
 import com.cookbook.viewmodel.viewmodel.PlannerViewModel;
-import com.example.cookbook.R;
+import com.cookbook.R;
 
 import java.util.List;
 

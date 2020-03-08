@@ -3,14 +3,12 @@ package com.cookbook.ui.adapter;
 import android.content.Context;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,10 +16,9 @@ import com.cookbook.data.entity.Entry;
 import com.cookbook.ui.PlannerFragment;
 import com.cookbook.ui.listener.PlannerEntryListener;
 import com.cookbook.ui.util.EditMode;
-import com.example.cookbook.R;
+import com.cookbook.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.MenuViewHolder> implements EditMode {
@@ -118,7 +115,6 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.MenuView
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
 
         List<Entry> day = mDays.get(position);
-        System.out.println("Binding " + dayNames[position]);
 
         holder.name.setText(dayNames[position]);
         ((PlannerEntryAdapter) holder.mealListRv.getAdapter()).updateList(day);

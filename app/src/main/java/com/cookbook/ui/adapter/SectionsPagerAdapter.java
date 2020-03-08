@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.cookbook.ui.PlannerFragment;
 import com.cookbook.ui.ShoppingListFragment;
-import com.example.cookbook.R;
+import com.cookbook.R;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to

@@ -8,7 +8,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.Nullable;
 
-import com.example.cookbook.R;
+import com.cookbook.R;
 
 public class TestSearch extends Activity {
 

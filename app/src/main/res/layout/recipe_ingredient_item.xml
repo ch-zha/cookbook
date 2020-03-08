@@ -4,28 +4,36 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="5sp"
     >
 
     <TextView
         android:id="@+id/recipe_ingredient_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight=".9"
-        android:padding="5sp"
+        android:layout_weight="60"
         style="@style/TextAppearance.AppCompat.Body1"
         android:text="Hello"
         />
 
     <TextView
         android:id="@+id/recipe_ingredient_quantity"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight=".1"
-        android:padding="5sp"
+        android:layout_weight="20"
+        android:textAlignment="textEnd"
         style="@style/TextAppearance.AppCompat.Body1"
-        android:text="Hello"
+        android:text="0"
+        />
+
+    <TextView
+        android:id="@+id/recipe_ingredient_unit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:textAlignment="textEnd"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:text="Whole"
         />
 
 </LinearLayout>

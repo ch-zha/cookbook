@@ -20,7 +20,7 @@ import com.cookbook.ui.listener.EditStepListener;
 import com.cookbook.viewmodel.service.UpdateIngredientsService;
 import com.cookbook.viewmodel.service.UpdateStepsService;
 import com.cookbook.viewmodel.viewmodel.RecipeDetailViewModel;
-import com.example.cookbook.R;
+import com.cookbook.R;
 
 import java.util.ArrayList;
 
@@ -40,7 +40,7 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
         Intent intent = getIntent();
         recipe_id = intent.getIntExtra("recipe_id", -1);
         String recipe_name = intent.getStringExtra("recipe_name");
-        if (recipe_name == null) recipe_name = getResources().getString(R.string.default_recipe_name); //TODO do error handling
+        if (recipe_name == null) recipe_name = getResources().getString(R.string.default_recipe_name); //TODO this case should no longer exist
 
         // Set viewmodel
         viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
@@ -52,7 +52,7 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
         rv_ingredients.setLayoutManager(new LinearLayoutManager(this));
 
         // Find recyclerview
-        rv_steps = (RecyclerView) findViewById(R.id.rv_recipe_steps);
+        rv_steps = findViewById(R.id.rv_recipe_steps);
         // Create and set adapter/layoutmanager
         rv_steps.setAdapter(new EditRecipeStepListAdapter(new ArrayList<>(), this));
         rv_steps.setLayoutManager(new LinearLayoutManager(this));
@@ -63,7 +63,7 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
         setToolbarName(recipe_name);
 
         //Set recipe
-        if (recipe_id != -1) setRecipe(recipe_id);
+        if (recipe_id != -1) setRecipe(recipe_id); //TODO do error handling
     }
 //
 //    @Override
@@ -128,6 +128,11 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     @Override
     public void onDeleteStep(int step_id) {
 
+        Intent updateDB = new Intent(this, UpdateStepsService.class);
+        updateDB.putExtra("step_id", step_id);
+        updateDB.putExtra("action", UpdateStepsService.Action.DELETE);
+        startService(updateDB);
+
     }
 
     @Override
@@ -151,7 +156,7 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     }
 
     @Override
-    public void onDeleteIngredient(int ingredient_name) {
+    public void onDeleteIngredient(String ingredient_name) {
 
         Intent updateDB = new Intent(this, UpdateIngredientsService.class);
         updateDB.putExtra("ingredient_name", ingredient_name);

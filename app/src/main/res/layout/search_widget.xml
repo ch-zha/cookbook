@@ -13,7 +13,9 @@
         android:iconifiedByDefault="false"
         android:imeOptions="actionDone"
         android:queryHint="@string/add_entry_hint"
-        android:visibility="visible">
+        android:searchIcon="@null"
+        android:visibility="visible"
+        android:padding="5sp">
     </SearchView>
 
 </LinearLayout>

@@ -1,6 +1,5 @@
 package com.cookbook.ui;
 
-import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +26,7 @@ import com.cookbook.ui.util.EditMode;
 import com.cookbook.ui.util.PlannerLayout;
 import com.cookbook.viewmodel.service.UpdatePlannerService;
 import com.cookbook.viewmodel.viewmodel.PlannerViewModel;
-import com.example.cookbook.R;
+import com.cookbook.R;
 
 import java.util.ArrayList;
 import java.util.List;

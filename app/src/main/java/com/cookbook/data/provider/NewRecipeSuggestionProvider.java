@@ -6,13 +6,18 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cookbook.data.api.ApiRecipe;
+import com.cookbook.data.api.ApiRecipeGsonAdapter;
 import com.cookbook.data.api.ApiResults;
 import com.cookbook.data.api.MealApi;
+import com.cookbook.R;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,10 +30,15 @@ public class NewRecipeSuggestionProvider extends ContentProvider {
 
     public static final String AUTHORITY = "com.cookbook.provider.newrecipesuggestion";
     public static final int MAX_RESULT_SIZE = 5;
-    public static final String[] CURSOR_COLUMNS = new String[] {"_id", SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_INTENT_DATA};
+    public static final String API_ID_EXTRA = "api_id";
+    public static final String[] CURSOR_COLUMNS = new String[] {
+            "_id",
+            SearchManager.SUGGEST_COLUMN_TEXT_1,
+            SearchManager.SUGGEST_COLUMN_INTENT_DATA,
+            SearchManager.EXTRA_DATA_KEY,
+            SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA
+    };
 
-    public static final String BASE_URL = "https://www.themealdb.com/api/json/v1/";
-    public static final String API_KEY = "1";
     private static Retrofit retrofit;
 
     @Override
@@ -43,14 +53,16 @@ public class NewRecipeSuggestionProvider extends ContentProvider {
         if (selectionArgs != null && selectionArgs.length > 0) {
 
             if (retrofit == null) {
+
                 retrofit = new Retrofit.Builder()
-                        .baseUrl(BASE_URL)
+                        .baseUrl(getContext().getString(R.string.mealdb_base_url))
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
 
             MealApi api = retrofit.create(MealApi.class);
-            Call<ApiResults> call = api.getSearchResults(API_KEY, selectionArgs[0]);
+            Call<ApiResults> call = api.getSearchResults(getContext().getString(R.string.mealdb_api_key), selectionArgs[0]);
+            Log.d("api_result", call.request().url().toString());
             MatrixCursor formattedCursor = new MatrixCursor(CURSOR_COLUMNS);
 
             try {
@@ -58,7 +70,13 @@ public class NewRecipeSuggestionProvider extends ContentProvider {
                 if (results != null) {
                     List<ApiRecipe> resultList = results.getResults();
                     for (int i = 0; i < resultList.size(); i++) {
-                        formattedCursor.addRow(new Object[]{i, resultList.get(i).getMealName(), resultList.get(i).getMealId()});
+                        formattedCursor.addRow(new Object[]{
+                                i,
+                                resultList.get(i).getMealName(),
+                                resultList.get(i).getMealName(),
+                                API_ID_EXTRA, //TODO find out why this doesn't set the key name?
+                                resultList.get(i).getMealId()
+                        });
                     }
                 }
             } catch (IOException e) {

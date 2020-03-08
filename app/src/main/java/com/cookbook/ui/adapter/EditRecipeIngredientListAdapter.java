@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cookbook.data.entity.Ingredient;
 import com.cookbook.data.entity.MeasurementUnit;
 import com.cookbook.ui.listener.EditIngredientListener;
-import com.example.cookbook.R;
+import com.cookbook.R;
 
 import java.util.List;
 
@@ -53,8 +54,11 @@ public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRe
 
             holder.name.setText(ingredient.getName());
             holder.quantity.setText(Double.toString(ingredient.getQuantity()));
+            holder.clear.setVisibility(View.VISIBLE);
         } else if (position == mIngredients.size()) {
-            holder.quantity.setText(Double.toString(tempQuantity));
+            holder.name.getText().clear();
+            holder.quantity.getText().clear();
+            holder.clear.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -63,16 +67,18 @@ public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRe
         return mIngredients.size() + 1;
     }
 
-    public class IngredientViewHolder extends RecyclerView.ViewHolder {
+    class IngredientViewHolder extends RecyclerView.ViewHolder {
 
-        public EditText name;
-        public EditText quantity;
+        EditText name;
+        EditText quantity;
+        ImageButton clear;
 
-        public IngredientViewHolder(View view) {
+        IngredientViewHolder(View view) {
             super(view);
 
             name = view.findViewById(R.id.recipe_ingredient_name);
             quantity = view.findViewById(R.id.recipe_ingredient_quantity);
+            clear = view.findViewById(R.id.clear);
 
             name.setHorizontallyScrolling(false);
             quantity.setHorizontallyScrolling(true);
@@ -104,6 +110,9 @@ public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRe
                 }
                 return false;
             });
+
+            clear.setOnClickListener(v ->
+                    listener.onDeleteIngredient(mIngredients.get(getAdapterPosition()).getName()));
         }
     }
 }

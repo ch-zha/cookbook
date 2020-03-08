@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.viewmodel.Ingredient;
-import com.example.cookbook.R;
+import com.cookbook.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

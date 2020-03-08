@@ -1,12 +1,18 @@
 package com.cookbook.ui;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,18 +24,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Recipe;
+import com.cookbook.data.provider.NewRecipeSuggestionProvider;
 import com.cookbook.ui.adapter.RecipeListAdapter;
 import com.cookbook.ui.listener.RecipeListListener;
 import com.cookbook.viewmodel.service.UpdateRecipeService;
 import com.cookbook.viewmodel.viewmodel.RecipeListViewModel;
-import com.example.cookbook.R;
+import com.cookbook.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class RecipesActivity extends AppCompatActivity implements RecipeListListener {
 
     RecyclerView recyclerView;
+    TextView activeDialogText = null;
+
+    /** Use with caution!! Make sure they are always reset on add recipe. **/
+    boolean useImportOnEdit = false;
+    String apiMealId = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,27 +78,70 @@ public class RecipesActivity extends AppCompatActivity implements RecipeListList
     }
 
     private void openNameDialog() {
+
+        useImportOnEdit = false;
+
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setMessage("Enter recipe name");
-        EditText textField = new EditText(this);
-        dialog.setView(textField);
-        dialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+
+        View search = getLayoutInflater().inflate(R.layout.search_widget, null);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = search.findViewById(R.id.search_widget);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint(getString(R.string.add_recipe_prompt));
+        ImageView searchButton = search.findViewById(getResources().getIdentifier("search_button", "id", "android"));
+        searchButton.setVisibility(View.GONE);
+        dialog.setView(search);
+
+        TextView textField = search.findViewById(Resources.getSystem().getIdentifier("search_src_text",
+                "id", "android"));
+        dialog.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 String recipe_name = textField.getText().toString();
                 Intent createRecipe = new Intent(RecipesActivity.this, UpdateRecipeService.class);
                 createRecipe.putExtra("recipe_name", recipe_name);
-                createRecipe.putExtra("action", UpdateRecipeService.Action.ADD);
+                if (useImportOnEdit) {
+                    createRecipe.putExtra("api_id", apiMealId);
+                    createRecipe.putExtra("action", UpdateRecipeService.Action.IMPORT);
+                }
+                else
+                    createRecipe.putExtra("action", UpdateRecipeService.Action.ADD);
+
                 startService(createRecipe);
+
             }
+
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                activeDialogText = null;
                 dialog.cancel();
             }
         });
+
+        activeDialogText = textField;
         dialog.show();
+
+    }
+
+    public void setActiveDialogText(String text) {
+        if (activeDialogText != null) {
+            activeDialogText.setText(text);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_INSERT)) {
+            setActiveDialogText(intent.getDataString());
+            activeDialogText.clearFocus();
+            useImportOnEdit = true;
+            apiMealId = intent.getStringExtra("intent_extra_data_key");
+        }
     }
 
     @Override

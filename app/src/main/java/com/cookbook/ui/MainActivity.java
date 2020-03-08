@@ -4,10 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.cookbook.ui.adapter.SectionsPagerAdapter;
-import com.cookbook.viewmodel.service.UpdateIngredientsService;
 import com.cookbook.viewmodel.service.UpdatePlannerService;
 import com.cookbook.viewmodel.viewmodel.RecipeListViewModel;
-import com.example.cookbook.R;
+import com.cookbook.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -61,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     /** Handle adding entry to planner **/
     @Override
     protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         if (intent != null && intent.getAction().equals(Intent.ACTION_INSERT)) {
 
             Intent updateDB = new Intent(this, UpdatePlannerService.class);

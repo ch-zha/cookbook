@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Recipe;
 import com.cookbook.ui.listener.RecipeListListener;
-import com.example.cookbook.R;
+import com.cookbook.R;
 
 import java.util.List;
 

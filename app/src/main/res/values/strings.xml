@@ -1,4 +1,9 @@
 <resources>
+
+    <!-- API Resources -->
+    <string name="mealdb_base_url">https://www.themealdb.com/api/json/v1/</string>
+    <string name="mealdb_api_key">1</string>
+
     <!-- Titles/Headers -->
     <string name="app_name">Cookbook</string>
     <string name="menu_tab_text">Planner</string>
@@ -8,6 +13,8 @@
     <!-- Edit Recipe Activity -->
     <string name="recipe_ingredients">Ingredients</string>
     <string name="recipe_steps">Steps</string>
+    <string name="add_step_prompt">Next step…</string>
+    <string name="add_ingredient_prompt">New ingredient…</string>
     <string name="default_recipe_name">New Recipe</string>
 
     <!-- Planner -->

@@ -41,6 +41,7 @@ public class UpdateStepsService extends IntentService {
                 repository.addStep(instructions, recipeId);
                 break;
             case DELETE:
+                repository.deleteStep(stepId);
                 break;
             case REORDER:
                 break;

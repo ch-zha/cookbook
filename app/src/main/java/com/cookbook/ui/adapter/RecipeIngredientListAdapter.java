@@ -10,7 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Ingredient;
-import com.example.cookbook.R;
+import com.cookbook.R;
+import com.cookbook.data.entity.MeasurementUnit;
 
 import java.util.List;
 
@@ -47,6 +48,7 @@ public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngr
 
         holder.name.setText(ingredient.getName());
         holder.quantity.setText(Double.toString(ingredient.getQuantity()));
+        holder.unit.setText(MeasurementUnit.getMeasurementUnitString(ingredient.getUnit()));
     }
 
     @Override
@@ -58,12 +60,14 @@ public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngr
 
         public TextView name;
         public TextView quantity;
+        public TextView unit;
 
         public IngredientViewHolder(View view) {
             super(view);
 
             name = view.findViewById(R.id.recipe_ingredient_name);
             quantity = view.findViewById(R.id.recipe_ingredient_quantity);
+            unit = view.findViewById(R.id.recipe_ingredient_unit);
         }
 
     }

@@ -4,13 +4,23 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="5sp"
     >
 
     <TextView
-        android:id="@+id/recipe_step"
-        android:layout_width="match_parent"
+        android:id="@+id/recipe_step_number"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="5sp"
+        android:layout_weight="8"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:text="1."
+        />
+
+    <TextView
+        android:id="@+id/recipe_step"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="92"
         style="@style/TextAppearance.AppCompat.Body1"
         android:text="Hello"
         />

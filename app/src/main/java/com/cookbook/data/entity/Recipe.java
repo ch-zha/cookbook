@@ -1,5 +1,6 @@
 package com.cookbook.data.entity;
 
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -12,9 +13,13 @@ public class Recipe {
 
     private final String name;
 
-    public Recipe(int id, String name) {
+    @Nullable
+    private String thumb = "";
+
+    public Recipe(int id, String name, String thumb) {
         this.id = id;
         this.name = name;
+        this.thumb = thumb;
     }
 
     @Ignore
@@ -32,6 +37,10 @@ public class Recipe {
 
     public String getName() {
         return name;
+    }
+
+    public String getThumb() {
+        return thumb;
     }
 
 }

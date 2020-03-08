@@ -49,10 +49,10 @@ public class UpdateIngredientsService extends IntentService {
                 repository.updateIngredientQuantity(ingredient_name, recipe_id, quantity);
                 break;
             case ADD:
-                System.out.println("Add");
                 repository.addIngredient(ingredient_name, recipe_id, quantity, unit);
                 break;
             case DELETE:
+                repository.deleteIngredientFromRecipe(ingredient_name, recipe_id);
                 break;
             default:
                 System.err.println("Unrecognized action in UpdateRecipeService");
