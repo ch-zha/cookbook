@@ -2,6 +2,7 @@ package com.cookbook.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -66,39 +67,44 @@ public class ViewRecipeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(recipe_name);
 
-
         // Set up FAB
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent editRecipe = new Intent(view.getContext(), EditRecipeActivity.class);
-                editRecipe.putExtra(EditRecipeActivity.RECIPE_ID_KEY, recipe_id);
-                editRecipe.putExtra(EditRecipeActivity.RECIPE_NAME_KEY, recipe_name);
-                startActivity(editRecipe);
-                // Take this activity off the stack
-                finish();
-                overridePendingTransition(R.anim.no_anim, R.anim.no_anim);
-            }
+        fab.setOnClickListener(view -> {
+            Intent editRecipe = new Intent(view.getContext(), EditRecipeActivity.class);
+            editRecipe.putExtra(EditRecipeActivity.RECIPE_ID_KEY, recipe_id);
+            editRecipe.putExtra(EditRecipeActivity.RECIPE_NAME_KEY, recipe_name);
+            startActivity(editRecipe);
+            // Take this activity off the stack
+            finish();
+            overridePendingTransition(R.anim.no_anim, R.anim.no_anim);
         });
     }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.recipes, menu);
-//        return true;
-//    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.recipes, menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_close:
+                Intent restart = new Intent(this, MainActivity.class);
+                restart.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                restart.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(restart);
                 overridePendingTransition(R.anim.no_anim, R.anim.slide_down);
-                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 
 }

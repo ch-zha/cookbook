@@ -23,8 +23,9 @@ public class Recipe {
     }
 
     @Ignore
-    public Recipe(String name) {
+    public Recipe(String name, String thumb) {
         this.name = name;
+        this.thumb = thumb;
     }
 
     public void setId(int id) {

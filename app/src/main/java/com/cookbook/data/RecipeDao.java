@@ -75,6 +75,13 @@ public interface RecipeDao {
             "WHERE recipe_id=:recipe_id AND name=:ingredient_name")
     void updateIngredientQuantity(int recipe_id, String ingredient_name, double quantity);
 
+    @Query("UPDATE ingredients " +
+            "SET quantity = " +
+                "((SELECT quantity FROM ingredients WHERE recipe_id=:recipe_id AND name=:ingredient_name) " +
+                "+ :quantity) " +
+            "WHERE recipe_id=:recipe_id AND name=:ingredient_name")
+    void addIngredientQuantity(int recipe_id, String ingredient_name, double quantity);
+
     @Query("DELETE FROM ingredients WHERE recipe_id = :recipe_id AND name = :ingredient_name")
     void deleteIngredientFromRecipe(int recipe_id, String ingredient_name);
 

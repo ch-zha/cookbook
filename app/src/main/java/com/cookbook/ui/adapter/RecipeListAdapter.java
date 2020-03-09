@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cookbook.data.entity.Recipe;
 import com.cookbook.ui.listener.RecipeListListener;
 import com.cookbook.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -42,8 +43,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         View contactView = inflater.inflate(R.layout.recipe_item, parent, false);
 
         // Return a new holder instance
-        RecipeViewHolder viewHolder = new RecipeViewHolder(contactView);
-        return viewHolder;
+        return new RecipeViewHolder(contactView);
     }
 
     @Override
@@ -51,7 +51,11 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         Recipe recipe = mRecipes.get(position);
 
         holder.name.setText(recipe.getName());
-        holder.icon.setImageDrawable(ContextCompat.getDrawable(holder.icon.getContext(), R.drawable.ic_launcher_background));
+        if (recipe.getThumb() != null && !recipe.getThumb().isEmpty()) {
+            Picasso.get().load(recipe.getThumb() + "/preview").into(holder.icon);
+        } else {
+            holder.icon.setImageDrawable(ContextCompat.getDrawable(holder.icon.getContext(), R.drawable.ic_launcher_foreground));
+        }
     }
 
     @Override
@@ -67,8 +71,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         public RecipeViewHolder(View view) {
             super(view);
 
-            name = (TextView) view.findViewById(R.id.recipe_item_name);
-            icon = (ImageView) view.findViewById(R.id.recipe_item_icon);
+            name = view.findViewById(R.id.recipe_item_name);
+            icon = view.findViewById(R.id.recipe_item_icon);
 
             itemView.setOnClickListener(this);
         }

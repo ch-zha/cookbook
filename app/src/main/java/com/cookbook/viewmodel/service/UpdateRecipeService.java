@@ -2,6 +2,7 @@ package com.cookbook.viewmodel.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -62,7 +63,7 @@ public class UpdateRecipeService extends IntentService {
                 break;
             case ADD:
                 this.recipe_name = intent.getStringExtra(RECIPE_NAME_KEY);
-                this.recipe_id = repository.addRecipe(recipe_name);
+                this.recipe_id = repository.addRecipe(recipe_name, "");
                 break;
             case IMPORT:
                 this.recipe_name = intent.getStringExtra(RECIPE_NAME_KEY);
@@ -103,11 +104,11 @@ public class UpdateRecipeService extends IntentService {
                 // If input recipe name does not match imported
                 // recipe name, only do regular add recipe
                 if (!this.recipe_name.equals(result.getMealName())) {
-                    return repository.addRecipe(recipe_name);
+                    return repository.addRecipe(recipe_name, "");
                 }
 
                 //Add recipe to recipes table
-                new_id = Math.toIntExact(repository.addRecipe(result.getMealName()));
+                new_id = Math.toIntExact(repository.addRecipe(result.getMealName(), result.getImageurl()));
 
                 //Add steps to steps table
                 for (String step : result.getSteps()) {
@@ -121,6 +122,7 @@ public class UpdateRecipeService extends IntentService {
 
                 if (!(measurementUnits.size() == ingredients.size()
                         && ingredients.size() == quantity.size())) {
+                    show_warning = true;
                     Log.e("Importing recipe", "Imported recipe is improperly formatted");
                 }
 
@@ -128,10 +130,23 @@ public class UpdateRecipeService extends IntentService {
 
                 for (int i = 0; i < size; i++) {
                     double thisQuantity = quantity.get(i) > 0 ? quantity.get(i) : 0;
-                    repository.addIngredient(ingredients.get(i), new_id, thisQuantity, measurementUnits.get(i));
+                    try {
+                        repository.addIngredient(ingredients.get(i), new_id, thisQuantity, measurementUnits.get(i));
+                    } catch (SQLiteConstraintException e) {
+                        e.printStackTrace();
+                        Log.e("UpdateRecipeService", "Error adding ingredient" + ingredients.get(i) + "Attempting update instead");
+
+                        try {
+                            repository.addIngredientQuantity(ingredients.get(i), new_id, thisQuantity);
+                        } catch (SQLiteConstraintException e2) {
+                            e2.printStackTrace();
+                            show_warning = true;
+                            Log.e("UpdateRecipeService", "Update failed. Skipping ingredient.");
+                        }
+                    }
                 }
 
-                this.show_warning = result.hasUnreadableFields();
+                this.show_warning = result.hasUnreadableFields() || show_warning;
 
             }
         } catch (IOException e) {
@@ -152,8 +167,8 @@ public class UpdateRecipeService extends IntentService {
             newRecipe.putExtra(EditRecipeActivity.RECIPE_ID_KEY, Math.toIntExact(recipe_id));
             newRecipe.putExtra(EditRecipeActivity.RECIPE_NAME_KEY, recipe_name);
             newRecipe.putExtra(EditRecipeActivity.SHOW_WARNING_KEY, show_warning);
+            newRecipe.putExtra(EditRecipeActivity.ANIMATE_KEY, true);
             startActivity(newRecipe);
-//                overridePendingTransition(R.anim.slide_up, R.anim.no_anim);
         }
     }
 }

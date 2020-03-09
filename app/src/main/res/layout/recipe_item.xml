@@ -4,23 +4,24 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2sp">
+    android:layout_margin="1dp"
+    >
 
     <ImageView
         android:id="@+id/recipe_item_icon"
-        android:layout_width="40sp"
-        android:layout_height="40sp"
-        android:layout_gravity="left"
-        android:layout_weight=".05"/>
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_weight="15"/>
 
     <TextView
         android:id="@+id/recipe_item_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight=".95"
-        android:padding="5sp"
-        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_weight="85"
+        android:paddingHorizontal="5dp"
+        style="@style/TextAppearance.AppCompat.Title"
         android:text="Hello"
         />
 

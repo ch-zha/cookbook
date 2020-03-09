@@ -26,18 +26,6 @@ public class Repository {
 
     /**** Recipes Table ****/
 
-    public void repopulate() {
-        recipeDao.deleteAll();
-        recipeDao.addRecipe(new Recipe("Brownies"));
-        recipeDao.addRecipe(new Recipe("Beef Chili"));
-        recipeDao.addRecipe(new Recipe("Chicken Pot Pie"));
-        recipeDao.addRecipe(new Recipe("Roast Chicken"));
-        recipeDao.addRecipe(new Recipe("Noodle Soup"));
-        recipeDao.addRecipe(new Recipe("Steamed Cauliflower"));
-        recipeDao.addRecipe(new Recipe("Fried Tofu"));
-        recipeDao.addRecipe(new Recipe("Stir-fried Green Beans"));
-    }
-
     public LiveData<List<Recipe>> getAllRecipes() {
         return recipeDao.getAllRecipes();
     }
@@ -46,8 +34,8 @@ public class Repository {
         return recipeDao.getRecipeName(id);
     }
 
-    public long addRecipe(String name) {
-        return recipeDao.addRecipe(new Recipe(name));
+    public long addRecipe(String name, String thumb) {
+        return recipeDao.addRecipe(new Recipe(name, thumb));
     }
 
     public void deleteRecipe(int recipe_id) {
@@ -74,6 +62,10 @@ public class Repository {
 
     public void updateIngredientQuantity(String ingredient_name, int recipe_id, double quantity) {
         recipeDao.updateIngredientQuantity(recipe_id, ingredient_name, quantity);
+    }
+
+    public void addIngredientQuantity(String ingredient_name, int recipe_id, double quantity) {
+        recipeDao.addIngredientQuantity(recipe_id, ingredient_name, quantity);
     }
 
     public void deleteIngredientFromRecipe(String ingredient_name, int recipe_id) {

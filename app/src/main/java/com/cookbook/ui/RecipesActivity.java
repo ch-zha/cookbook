@@ -3,14 +3,12 @@ package com.cookbook.ui;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -25,7 +23,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Update;
 
 import com.cookbook.data.entity.Recipe;
 import com.cookbook.ui.adapter.RecipeListAdapter;
@@ -165,6 +162,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipeListList
         goToRecipe.putExtra(ViewRecipeActivity.RECIPE_ID_KEY, id);
         goToRecipe.putExtra(ViewRecipeActivity.RECIPE_NAME_KEY, name);
         startActivity(goToRecipe);
+        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
     }
 
     @Override
@@ -191,4 +189,11 @@ public class RecipesActivity extends AppCompatActivity implements RecipeListList
         });
         builder.create().show();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.no_anim, R.anim.slide_down);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.cookbook.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -32,6 +33,7 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     public static final String RECIPE_ID_KEY = "recipe_id";
     public static final String RECIPE_NAME_KEY = "recipe_name";
     public static final String SHOW_WARNING_KEY = "show_warning";
+    public static final String ANIMATE_KEY = "animate";
 
     private RecipeDetailViewModel viewModel;
     private RecyclerView rv_steps;
@@ -48,6 +50,9 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
         recipe_id = intent.getIntExtra(RECIPE_ID_KEY, -1);
         boolean show_warning = intent.getBooleanExtra(SHOW_WARNING_KEY, false);
         final String recipe_name = intent.getStringExtra(RECIPE_NAME_KEY);
+
+        if (intent.getBooleanExtra(ANIMATE_KEY, false))
+            overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 
         // Set viewmodel
         viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
@@ -90,12 +95,12 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
             finish();
         });
     }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.recipes, menu);
-//        return true;
-//    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.recipes, menu);
+        return true;
+    }
 
     private void setRecipe(int recipe_id) {
 
@@ -117,7 +122,10 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_close:
-                finish();
+                Intent restart = new Intent(this, MainActivity.class);
+                restart.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                restart.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(restart);
                 overridePendingTransition(R.anim.no_anim, R.anim.slide_down);
                 return true;
             default:
