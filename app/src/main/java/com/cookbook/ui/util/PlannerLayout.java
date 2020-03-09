@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GestureDetectorCompat;
 
+/** Custom layout for planner fragment to intercept touch events because
+ * child recyclerview elements keep stealing them for some reason **/
 public class PlannerLayout extends ConstraintLayout {
 
     private GestureDetectorCompat mDetector;
@@ -26,7 +28,7 @@ public class PlannerLayout extends ConstraintLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    /*** Custom stuff for gestures ***/
+    /*** Detect & intercept gestures ***/
 
     public void setGestureDetector(GestureDetectorCompat detector) {
         this.mDetector = detector;

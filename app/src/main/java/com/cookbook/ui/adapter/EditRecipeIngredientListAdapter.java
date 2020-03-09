@@ -146,6 +146,7 @@ public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRe
                     String item = (String) parent.getItemAtPosition(position);
                     MeasurementUnit unit = MeasurementUnit.getMeasurementUnit(item);
                     if (getAdapterPosition() < 0) {
+                        //TODO not sure why this is happening? maybe because of NestedScrollView? find out
                     } else if (getAdapterPosition() < mIngredients.size()) {
                         String ingredient = mIngredients.get(getAdapterPosition()).getName();
                         listener.onUpdateIngredientUnit(ingredient, unit);

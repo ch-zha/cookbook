@@ -50,6 +50,10 @@ public class Repository {
         return recipeDao.addRecipe(new Recipe(name));
     }
 
+    public void deleteRecipe(int recipe_id) {
+        recipeDao.deleteRecipe(recipe_id);
+    }
+
     /**** Ingredients Table ****/
 
     public LiveData<List<Ingredient>> getIngredientsForRecipe(int id) {

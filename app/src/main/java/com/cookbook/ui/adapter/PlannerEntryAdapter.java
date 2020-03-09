@@ -103,6 +103,8 @@ public class PlannerEntryAdapter extends RecyclerView.Adapter<PlannerEntryAdapte
         if (position < mEntries.size()) {
             int recipe_id = mEntries.get(position).getRecipeId();
             holder.name.setTypeface(null, Typeface.NORMAL);
+            //TODO this will probably cause bugs if recipe name changing is implemented. Find a way
+            //to put this in main fragment/activity?
             viewModel.getRecipeName(recipe_id).observe(owner, name -> {
                 holder.name.setText(name);
             });
@@ -116,7 +118,7 @@ public class PlannerEntryAdapter extends RecyclerView.Adapter<PlannerEntryAdapte
                 holder.name.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Note: day gets set by clickListener (after bubbling up)
+                        //Note: real value for day gets set by clickListener (after bubbling up)
                         clickListener.startSearch(0);
                     }
                 });

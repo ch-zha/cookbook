@@ -30,6 +30,7 @@ public class UpdateRecipeService extends IntentService {
 
     public static final String API_ID_KEY = "api_id";
     public static final String RECIPE_NAME_KEY = "recipe_name";
+    public static final String RECIPE_ID_KEY = "recipe_id";
     public static final String ACTION_KEY = "action";
 
     public enum Action {
@@ -69,6 +70,8 @@ public class UpdateRecipeService extends IntentService {
                 this.recipe_id = importRecipe(api_id);
                 break;
             case DELETE:
+                this.recipe_id = intent.getIntExtra(RECIPE_ID_KEY, -1);
+                repository.deleteRecipe((int) recipe_id);
                 break;
             default:
                 System.err.println("Unrecognized action in UpdateStepsService");

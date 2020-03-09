@@ -1,5 +1,6 @@
 package com.cookbook.ui;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -29,6 +31,7 @@ import com.cookbook.data.entity.Recipe;
 import com.cookbook.ui.adapter.RecipeListAdapter;
 import com.cookbook.ui.listener.RecipeListListener;
 import com.cookbook.ui.listener.SwipeHelper;
+import com.cookbook.ui.listener.SwipeListener;
 import com.cookbook.viewmodel.service.UpdateRecipeService;
 import com.cookbook.viewmodel.viewmodel.RecipeListViewModel;
 import com.cookbook.R;
@@ -36,15 +39,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class RecipesActivity extends AppCompatActivity implements RecipeListListener {
+public class RecipesActivity extends AppCompatActivity implements RecipeListListener, SwipeListener {
 
     RecyclerView recyclerView;
+    SwipeHelper swipeHelper;
     TextView activeDialogText = null;
 
     /** Use with caution!! Make sure they are always reset on add recipe. **/
     boolean useImportOnEdit = false;
     String apiMealId = "";
 
+    @SuppressLint("ClickableViewAccessibility") //TODO fix this later
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +64,8 @@ public class RecipesActivity extends AppCompatActivity implements RecipeListList
         recyclerView = findViewById(R.id.recipes_list);
         recyclerView.setAdapter(new RecipeListAdapter(new ArrayList<Recipe>(), this));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        new ItemTouchHelper(new SwipeHelper()).attachToRecyclerView(recyclerView);
+        this.swipeHelper = new SwipeHelper(this);
+        new ItemTouchHelper(swipeHelper).attachToRecyclerView(recyclerView);
 
         // Get ViewModel
         RecipeListViewModel viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
@@ -159,5 +165,30 @@ public class RecipesActivity extends AppCompatActivity implements RecipeListList
         goToRecipe.putExtra(ViewRecipeActivity.RECIPE_ID_KEY, id);
         goToRecipe.putExtra(ViewRecipeActivity.RECIPE_NAME_KEY, name);
         startActivity(goToRecipe);
+    }
+
+    @Override
+    public void onSwipe(RecyclerView.ViewHolder viewHolder) {
+        Log.d("Recipes activity", "swipe");
+
+        RecipeListAdapter.RecipeViewHolder vH =(RecipeListAdapter.RecipeViewHolder) viewHolder;
+        Recipe recipe = vH.getRecipe();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Delete \"" + recipe.getName() + "\"? This action cannot be undone.");
+        builder.setPositiveButton("Delete", (dialog, which) -> {
+
+            Intent deleteRecipe = new Intent(getApplicationContext(), UpdateRecipeService.class);
+            deleteRecipe.putExtra(UpdateRecipeService.ACTION_KEY, UpdateRecipeService.Action.DELETE);
+            deleteRecipe.putExtra(UpdateRecipeService.RECIPE_ID_KEY, recipe.getId());
+            startService(deleteRecipe);
+
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setOnDismissListener(dialog -> {
+            // Unswipe item
+            recyclerView.getAdapter().notifyItemChanged(viewHolder.getAdapterPosition());
+        });
+        builder.create().show();
     }
 }
