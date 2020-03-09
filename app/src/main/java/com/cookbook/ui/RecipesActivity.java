@@ -20,20 +20,21 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Update;
 
 import com.cookbook.data.entity.Recipe;
-import com.cookbook.data.provider.NewRecipeSuggestionProvider;
 import com.cookbook.ui.adapter.RecipeListAdapter;
 import com.cookbook.ui.listener.RecipeListListener;
+import com.cookbook.ui.listener.SwipeHelper;
 import com.cookbook.viewmodel.service.UpdateRecipeService;
 import com.cookbook.viewmodel.viewmodel.RecipeListViewModel;
 import com.cookbook.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 public class RecipesActivity extends AppCompatActivity implements RecipeListListener {
 
@@ -50,14 +51,15 @@ public class RecipesActivity extends AppCompatActivity implements RecipeListList
         setContentView(R.layout.recipes_main);
 
         // Set toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.recipes_toolbar);
+        Toolbar toolbar = findViewById(R.id.recipes_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.recipes_title);
 
         // Create recyclerview
-        recyclerView = (RecyclerView) findViewById(R.id.recipes_list);
+        recyclerView = findViewById(R.id.recipes_list);
         recyclerView.setAdapter(new RecipeListAdapter(new ArrayList<Recipe>(), this));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        new ItemTouchHelper(new SwipeHelper()).attachToRecyclerView(recyclerView);
 
         // Get ViewModel
         RecipeListViewModel viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
@@ -67,12 +69,9 @@ public class RecipesActivity extends AppCompatActivity implements RecipeListList
 
         // Set up FAB
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Create dialog to enter recipe name if new recipe
-                openNameDialog();
-            }
+        fab.setOnClickListener(view -> {
+            // Create dialog to enter recipe name if new recipe
+            openNameDialog();
         });
 
     }
@@ -94,32 +93,24 @@ public class RecipesActivity extends AppCompatActivity implements RecipeListList
 
         TextView textField = search.findViewById(Resources.getSystem().getIdentifier("search_src_text",
                 "id", "android"));
-        dialog.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("Add", (dialog1, which) -> {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                String recipe_name = textField.getText().toString();
-                Intent createRecipe = new Intent(RecipesActivity.this, UpdateRecipeService.class);
-                createRecipe.putExtra("recipe_name", recipe_name);
-                if (useImportOnEdit) {
-                    createRecipe.putExtra("api_id", apiMealId);
-                    createRecipe.putExtra("action", UpdateRecipeService.Action.IMPORT);
-                }
-                else
-                    createRecipe.putExtra("action", UpdateRecipeService.Action.ADD);
-
-                startService(createRecipe);
-
+            String recipe_name = textField.getText().toString();
+            Intent createRecipe = new Intent(RecipesActivity.this, UpdateRecipeService.class);
+            createRecipe.putExtra(UpdateRecipeService.RECIPE_NAME_KEY, recipe_name);
+            if (useImportOnEdit) {
+                createRecipe.putExtra(UpdateRecipeService.API_ID_KEY, apiMealId);
+                createRecipe.putExtra(UpdateRecipeService.ACTION_KEY, UpdateRecipeService.Action.IMPORT);
             }
+            else
+                createRecipe.putExtra(UpdateRecipeService.ACTION_KEY, UpdateRecipeService.Action.ADD);
+
+            startService(createRecipe);
 
         });
-        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                activeDialogText = null;
-                dialog.cancel();
-            }
+        dialog.setNegativeButton("Cancel", (dialog12, which) -> {
+            activeDialogText = null;
+            dialog12.cancel();
         });
 
         activeDialogText = textField;
@@ -165,8 +156,8 @@ public class RecipesActivity extends AppCompatActivity implements RecipeListList
     @Override
     public void onClick(View view, int id, String name) {
         Intent goToRecipe = new Intent(view.getContext(), ViewRecipeActivity.class);
-        goToRecipe.putExtra("recipe_id", id);
-        goToRecipe.putExtra("recipe_name", name);
+        goToRecipe.putExtra(ViewRecipeActivity.RECIPE_ID_KEY, id);
+        goToRecipe.putExtra(ViewRecipeActivity.RECIPE_NAME_KEY, name);
         startActivity(goToRecipe);
     }
 }

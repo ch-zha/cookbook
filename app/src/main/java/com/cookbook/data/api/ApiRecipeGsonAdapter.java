@@ -61,9 +61,13 @@ public class ApiRecipeGsonAdapter extends TypeAdapter<ApiRecipe> {
     @Override
     public ApiRecipe read(JsonReader in) throws IOException {
 
+        // Enter result body
         in.beginObject();
+        // "meals" array name
         in.nextName();
+        // Enter meals array
         in.beginArray();
+        // Enter first result object
         in.beginObject();
 
         ApiRecipe recipe = new ApiRecipe();
@@ -123,7 +127,7 @@ public class ApiRecipeGsonAdapter extends TypeAdapter<ApiRecipe> {
                 }
             }
 
-            //TODO add ingredient source as field and display it when importing
+            //TODO add original recipe source as link and display it somewhere
 
             else {
                 in.skipValue();
@@ -145,7 +149,7 @@ public class ApiRecipeGsonAdapter extends TypeAdapter<ApiRecipe> {
 
         // Turns fraction characters (e.g. ½) into normal numbers
         string = Normalizer.normalize(string, Normalizer.Form.NFKD);
-        //TODO this will make proper fractions involving vulgar fraction characters act weird. Fix later
+        //TODO this will make proper fractions involving vulgar fraction characters (eg 6½) act weird. Fix later
         Pattern pattern = Pattern.compile("[\\d.⁄/]*");
         Matcher matcher = pattern.matcher(string);
         while (matcher.find()) {
@@ -177,6 +181,8 @@ public class ApiRecipeGsonAdapter extends TypeAdapter<ApiRecipe> {
             Matcher matcher = pattern.matcher(string);
             if (matcher.find()) {
                 String result = alias;
+                // Uses first part of regex to get unit so it is not vulnerable to
+                // changes in ordering. But seems inefficient. Fix later?
                 unit = MeasurementUnit.getMeasurementUnit(alias.split("[|]")[0]);
             }
         }
@@ -186,6 +192,8 @@ public class ApiRecipeGsonAdapter extends TypeAdapter<ApiRecipe> {
     }
 
     private static String[] buildAliases() {
+
+        // I hate this. Remove string concat & make more concise later
 
         String gram = "";
         for (String alias : GRAM_ALIASES) {

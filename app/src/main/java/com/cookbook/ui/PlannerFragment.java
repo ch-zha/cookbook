@@ -58,7 +58,7 @@ public class PlannerFragment extends Fragment implements EditMode, PlannerEntryL
 
         this.recyclerView = root.findViewById(R.id.rv_menu_cards);
         this.recyclerView.setAdapter(new PlannerAdapter(new ArrayList<>(), this, this));
-        viewModel.getPlanner().observe(this, entries -> {
+        viewModel.getPlanner().observe(getViewLifecycleOwner(), entries -> {
             ((PlannerAdapter) recyclerView.getAdapter()).updateList(entries);
         });
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -102,11 +102,11 @@ public class PlannerFragment extends Fragment implements EditMode, PlannerEntryL
     }
 
     @Override
-    public void onClick(int meal_id) {
+    public void onClick(int entry_id) {
 
         Intent updateDB = new Intent(getContext(), UpdatePlannerService.class);
-        updateDB.putExtra("action", UpdatePlannerService.Action.DELETE);
-        updateDB.putExtra("entry_id", meal_id);
+        updateDB.putExtra(UpdatePlannerService.ACTION_KEY, UpdatePlannerService.Action.DELETE);
+        updateDB.putExtra(UpdatePlannerService.ENTRY_ID_KEY, entry_id);
         getContext().startService(updateDB);
 
     }

@@ -2,6 +2,7 @@ package com.cookbook.viewmodel.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -11,6 +12,11 @@ import com.cookbook.data.Repository;
 import com.cookbook.ui.EditRecipeActivity;
 
 public class UpdatePlannerService extends IntentService {
+
+    public static final String RECIPE_ID_KEY = "recipe_id";
+    public static final String DAY_KEY = "day";
+    public static final String ENTRY_ID_KEY = "entry_id";
+    public static final String ACTION_KEY = "action";
 
     public enum Action {
         UPDATE,
@@ -31,24 +37,22 @@ public class UpdatePlannerService extends IntentService {
 
         RecipeDao dao = RecipeDatabase.getInstance(getApplicationContext()).getRecipeDao();
         this.repository = new Repository(dao);
-        this.action = (Action) intent.getSerializableExtra("action");
-        int day = intent.getIntExtra("day", -1);
+        this.action = (Action) intent.getSerializableExtra(ACTION_KEY);
+        int day = intent.getIntExtra(DAY_KEY, -1);
 
         switch (action) {
             case UPDATE:
                 break;
             case ADD:
-                int recipe_id = intent.getIntExtra("recipe_id", -1);
+                int recipe_id = intent.getIntExtra(RECIPE_ID_KEY, -1);
                 repository.addMealToDay(day, recipe_id);
-                System.out.println("Add " + recipe_id + "to day " + day);
                 break;
             case DELETE:
-                int meal_id = intent.getIntExtra("entry_id", -1);
+                int meal_id = intent.getIntExtra(ENTRY_ID_KEY, -1);
                 repository.removeMeal(meal_id);
-                System.out.println("Remove meal " + meal_id);
                 break;
             default:
-                System.err.println("Unrecognized action in UpdatePlannerService");
+                Log.e("UpdatePlannerService", "Unrecognized action: " + action.toString());
                 break;
         }
     }

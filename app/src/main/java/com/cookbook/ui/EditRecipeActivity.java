@@ -86,6 +86,7 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
             goToView.putExtra(ViewRecipeActivity.RECIPE_ID_KEY, recipe_id);
             startActivity(goToView);
             overridePendingTransition(R.anim.no_anim, R.anim.no_anim);
+            // Take this activity off the stack
             finish();
         });
     }

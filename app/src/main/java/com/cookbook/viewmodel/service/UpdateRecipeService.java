@@ -28,6 +28,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UpdateRecipeService extends IntentService {
 
+    public static final String API_ID_KEY = "api_id";
+    public static final String RECIPE_NAME_KEY = "recipe_name";
+    public static final String ACTION_KEY = "action";
+
     public enum Action {
         UPDATE,
         ADD,
@@ -50,18 +54,18 @@ public class UpdateRecipeService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         RecipeDao dao = RecipeDatabase.getInstance(getApplicationContext()).getRecipeDao();
         this.repository = new Repository(dao);
-        this.action = (Action) intent.getSerializableExtra("action");
+        this.action = (Action) intent.getSerializableExtra(ACTION_KEY);
 
         switch (action) {
             case UPDATE:
                 break;
             case ADD:
-                this.recipe_name = intent.getStringExtra("recipe_name");
+                this.recipe_name = intent.getStringExtra(RECIPE_NAME_KEY);
                 this.recipe_id = repository.addRecipe(recipe_name);
                 break;
             case IMPORT:
-                this.recipe_name = intent.getStringExtra("recipe_name");
-                String api_id = intent.getStringExtra("api_id");
+                this.recipe_name = intent.getStringExtra(RECIPE_NAME_KEY);
+                String api_id = intent.getStringExtra(API_ID_KEY);
                 this.recipe_id = importRecipe(api_id);
                 break;
             case DELETE:
@@ -87,8 +91,6 @@ public class UpdateRecipeService extends IntentService {
                 .build();
         MealApi api = retrofit.create(MealApi.class);
         Call<ApiRecipe> call = api.getRecipe(getApplicationContext().getString(R.string.mealdb_api_key), recipe_id);
-        Log.d("api_result", recipe_id);
-        Log.d("api_result", call.request().url().toString());
 
         try {
             ApiRecipe result = call.execute().body();
@@ -103,7 +105,6 @@ public class UpdateRecipeService extends IntentService {
 
                 //Add recipe to recipes table
                 new_id = Math.toIntExact(repository.addRecipe(result.getMealName()));
-                Log.d("api_result", result.getMealName());
 
                 //Add steps to steps table
                 for (String step : result.getSteps()) {
@@ -122,13 +123,8 @@ public class UpdateRecipeService extends IntentService {
 
                 int size = Math.min(measurementUnits.size(), Math.min(quantity.size(), ingredients.size()));
 
-                for (String ingredient : ingredients) {
-                    Log.d("Import recipe service - list ingredients", ingredient);
-                }
-
                 for (int i = 0; i < size; i++) {
                     double thisQuantity = quantity.get(i) > 0 ? quantity.get(i) : 0;
-                    Log.d("Import recipe service - add ingredient", ingredients.get(i));
                     repository.addIngredient(ingredients.get(i), new_id, thisQuantity, measurementUnits.get(i));
                 }
 
@@ -150,9 +146,9 @@ public class UpdateRecipeService extends IntentService {
             Intent newRecipe = new Intent(this, EditRecipeActivity.class);
             newRecipe.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             //NOTE long to int conversion could cause issues if DB is too big, but unlikely
-            newRecipe.putExtra("recipe_id", Math.toIntExact(recipe_id));
-            newRecipe.putExtra("recipe_name", recipe_name);
-            newRecipe.putExtra("show_warning", show_warning);
+            newRecipe.putExtra(EditRecipeActivity.RECIPE_ID_KEY, Math.toIntExact(recipe_id));
+            newRecipe.putExtra(EditRecipeActivity.RECIPE_NAME_KEY, recipe_name);
+            newRecipe.putExtra(EditRecipeActivity.SHOW_WARNING_KEY, show_warning);
             startActivity(newRecipe);
 //                overridePendingTransition(R.anim.slide_up, R.anim.no_anim);
         }

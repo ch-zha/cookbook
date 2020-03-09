@@ -73,9 +73,10 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent editRecipe = new Intent(view.getContext(), EditRecipeActivity.class);
-                editRecipe.putExtra("recipe_id", recipe_id);
-                editRecipe.putExtra("recipe_name", recipe_name);
+                editRecipe.putExtra(EditRecipeActivity.RECIPE_ID_KEY, recipe_id);
+                editRecipe.putExtra(EditRecipeActivity.RECIPE_NAME_KEY, recipe_name);
                 startActivity(editRecipe);
+                // Take this activity off the stack
                 finish();
                 overridePendingTransition(R.anim.no_anim, R.anim.no_anim);
             }

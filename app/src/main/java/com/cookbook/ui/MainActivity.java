@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //TODO why is this needed here? remove if useless
         RecipeListViewModel viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
 
         // Set up tabs
@@ -64,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null && intent.getAction().equals(Intent.ACTION_INSERT)) {
 
             Intent updateDB = new Intent(this, UpdatePlannerService.class);
-            updateDB.putExtra("action", UpdatePlannerService.Action.ADD);
-            updateDB.putExtra("day", sectionsPagerAdapter.getPlanner().getDayToAddEntry());
-            updateDB.putExtra("recipe_id", Integer.valueOf(intent.getDataString()));
+            updateDB.putExtra(UpdatePlannerService.ACTION_KEY, UpdatePlannerService.Action.ADD);
+            updateDB.putExtra(UpdatePlannerService.DAY_KEY, sectionsPagerAdapter.getPlanner().getDayToAddEntry());
+            updateDB.putExtra(UpdatePlannerService.RECIPE_ID_KEY, Integer.valueOf(intent.getDataString()));
             startService(updateDB);
 
             sectionsPagerAdapter.getPlanner().dismissAllActiveDialogs();

@@ -56,6 +56,7 @@ public class NewRecipeSuggestionProvider extends ContentProvider {
 
                 retrofit = new Retrofit.Builder()
                         .baseUrl(getContext().getString(R.string.mealdb_base_url))
+                        //Not using custom type converter here since only name & id are needed
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
