@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setFabBehaviorToEdit() {
         fab.setOnClickListener(new FABEditModeBehavior());
-        fab.setImageDrawable(getDrawable(R.drawable.ic_close_24px));
+        fab.setImageDrawable(getDrawable(R.drawable.ic_done_24px));
     }
 
     public void setFabBehaviorToNormal() {

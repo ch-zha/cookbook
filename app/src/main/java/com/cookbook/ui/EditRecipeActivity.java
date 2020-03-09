@@ -3,6 +3,7 @@ package com.cookbook.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,10 +23,15 @@ import com.cookbook.viewmodel.service.UpdateIngredientsService;
 import com.cookbook.viewmodel.service.UpdateStepsService;
 import com.cookbook.viewmodel.viewmodel.RecipeDetailViewModel;
 import com.cookbook.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class EditRecipeActivity extends AppCompatActivity implements EditStepListener, EditIngredientListener {
+
+    public static final String RECIPE_ID_KEY = "recipe_id";
+    public static final String RECIPE_NAME_KEY = "recipe_name";
+    public static final String SHOW_WARNING_KEY = "show_warning";
 
     private RecipeDetailViewModel viewModel;
     private RecyclerView rv_steps;
@@ -39,11 +45,9 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
 
         // Get recipe instance (default value is -1)
         Intent intent = getIntent();
-        recipe_id = intent.getIntExtra("recipe_id", -1);
-        boolean show_warning = intent.getBooleanExtra("show_warning", false);
-        String recipe_name = intent.getStringExtra("recipe_name");
-        if (recipe_name == null)
-            recipe_name = getResources().getString(R.string.default_recipe_name); //TODO this case should no longer exist
+        recipe_id = intent.getIntExtra(RECIPE_ID_KEY, -1);
+        boolean show_warning = intent.getBooleanExtra(SHOW_WARNING_KEY, false);
+        final String recipe_name = intent.getStringExtra(RECIPE_NAME_KEY);
 
         // Set viewmodel
         viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
@@ -73,6 +77,17 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
             builder.setMessage("Some fields could not be recognized. Please check to see if the information is correct.");
             builder.show();
         }
+
+        //Set FAB
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            Intent goToView = new Intent(this, ViewRecipeActivity.class);
+            goToView.putExtra(ViewRecipeActivity.RECIPE_NAME_KEY, recipe_name);
+            goToView.putExtra(ViewRecipeActivity.RECIPE_ID_KEY, recipe_id);
+            startActivity(goToView);
+            overridePendingTransition(R.anim.no_anim, R.anim.no_anim);
+            finish();
+        });
     }
 //
 //    @Override
@@ -201,6 +216,13 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
 
     @Override
     public void onUpdateIngredientUnit(String ingredient_name, MeasurementUnit unit) {
+
+        Intent updateDB = new Intent(this, UpdateIngredientsService.class);
+        updateDB.putExtra("ingredient_name", ingredient_name);
+        updateDB.putExtra("recipe_id", recipe_id);
+        updateDB.putExtra("unit", unit);
+        updateDB.putExtra("action", UpdateIngredientsService.Action.UPDATE_UNIT);
+        startService(updateDB);
 
     }
 

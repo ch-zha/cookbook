@@ -12,6 +12,24 @@ public enum MeasurementUnit {
     mL,
     Pinch;
 
+    private static String[] ALL_UNITS_AS_STRING;
+
+    public static String[] getAllUnitsAsString() {
+        if (ALL_UNITS_AS_STRING == null) {
+            ALL_UNITS_AS_STRING = new String[] {
+                    getMeasurementUnitString(MeasurementUnit.Whole),
+                    getMeasurementUnitString(MeasurementUnit.Gram),
+                    getMeasurementUnitString(MeasurementUnit.TBSP),
+                    getMeasurementUnitString(MeasurementUnit.TSP),
+                    getMeasurementUnitString(MeasurementUnit.Cup),
+                    getMeasurementUnitString(MeasurementUnit.lb),
+                    getMeasurementUnitString(MeasurementUnit.mL),
+                    getMeasurementUnitString(MeasurementUnit.Pinch)
+            };
+        }
+        return ALL_UNITS_AS_STRING;
+    }
+
     @TypeConverter
     public static MeasurementUnit getMeasurementUnit(String unit) {
         switch (unit) {

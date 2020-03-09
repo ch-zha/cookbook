@@ -23,6 +23,9 @@ import java.util.ArrayList;
 
 public class ViewRecipeActivity extends AppCompatActivity {
 
+    public static final String RECIPE_ID_KEY = "recipe_id";
+    public static final String RECIPE_NAME_KEY = "recipe_name";
+
     private RecyclerView rv_ingredients = null;
     private RecyclerView rv_steps = null;
 
@@ -33,8 +36,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         // Get recipe instance (default value is -1)
         Intent intent = getIntent();
-        int recipe_id = intent.getIntExtra("recipe_id", -1);
-        String recipe_name = intent.getStringExtra("recipe_name");
+        int recipe_id = intent.getIntExtra(RECIPE_ID_KEY, -1);
+        String recipe_name = intent.getStringExtra(RECIPE_NAME_KEY);
 
         // Find recyclerviews
         rv_ingredients = (RecyclerView) findViewById(R.id.rv_recipe_ingredients);
@@ -73,7 +76,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 editRecipe.putExtra("recipe_id", recipe_id);
                 editRecipe.putExtra("recipe_name", recipe_name);
                 startActivity(editRecipe);
-//                overridePendingTransition(R.anim.slide_up, R.anim.no_anim);
+                finish();
+                overridePendingTransition(R.anim.no_anim, R.anim.no_anim);
             }
         });
     }
@@ -88,8 +92,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_close:
-                finish();
                 overridePendingTransition(R.anim.no_anim, R.anim.slide_down);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -11,7 +11,7 @@
         android:id="@+id/recipe_ingredient_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="55"
+        android:layout_weight="45"
         style="@style/TextAppearance.AppCompat.Body1"
         android:hint="@string/add_ingredient_prompt"
         android:inputType="text"
@@ -22,7 +22,7 @@
         android:id="@+id/recipe_ingredient_quantity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="20"
+        android:layout_weight="15"
         android:textAlignment="textEnd"
         style="@style/TextAppearance.AppCompat.Body1"
         android:inputType="numberDecimal"
@@ -31,10 +31,11 @@
         />
 
     <Spinner
+        android:id="@+id/recipe_ingredient_unit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="20" />
+        android:textAlignment="textEnd"
+        android:layout_weight="35" />
 
     <ImageButton
         android:id="@+id/clear"
