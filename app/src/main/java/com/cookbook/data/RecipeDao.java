@@ -25,7 +25,8 @@ public interface RecipeDao {
                 "ingredients.unit " +
             "FROM planner " +
             "INNER JOIN ingredients ON ingredients.recipe_id=planner.recipe_id " +
-            "GROUP BY ingredients.name, ingredients.unit")
+            "GROUP BY ingredients.name, ingredients.unit " +
+            "ORDER BY ingredients.name")
     LiveData<List<Ingredient>> getShoppingList();
 
     /**** Recipes Table ****/
@@ -58,7 +59,9 @@ public interface RecipeDao {
     void deleteAll();
 
     /**** Ingredients Table ****/
-    @Query("SELECT * FROM ingredients WHERE recipe_id = :id")
+    @Query("SELECT * FROM ingredients " +
+            "WHERE recipe_id = :id " +
+            "ORDER BY name")
     LiveData<List<Ingredient>> getIngredientsForRecipe(int id);
 
     @Insert
@@ -113,7 +116,7 @@ public interface RecipeDao {
 
     @Query("SELECT * FROM planner " +
             "WHERE day IN (:days) " +
-            "ORDER BY day, recipe_id")
+            "ORDER BY day, recipe_id ")
     LiveData<List<Entry>> getMealsForDays(int[] days);
 
     //TODO fix place

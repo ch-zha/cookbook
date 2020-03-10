@@ -15,10 +15,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Ingredient;
 import com.cookbook.data.entity.MeasurementUnit;
+import com.cookbook.ui.adapter.diffutils.IngredientDiffCallback;
 import com.cookbook.ui.listener.EditIngredientListener;
 import com.cookbook.R;
 
@@ -39,9 +41,12 @@ public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRe
     }
 
     public void updateList(List<Ingredient> ingredients) {
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new IngredientDiffCallback(mIngredients, ingredients), false);
         this.mIngredients = ingredients;
-        notifyDataSetChanged();
+        result.dispatchUpdatesTo(this);
+        notifyItemChanged(mIngredients.size());
     }
+
 
     @NonNull
     @Override

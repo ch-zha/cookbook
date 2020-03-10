@@ -11,9 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Entry;
+import com.cookbook.ui.adapter.diffutils.PlannerEntryDiffCallback;
 import com.cookbook.ui.listener.PlannerEntryListener;
 import com.cookbook.ui.util.EditMode;
 import com.cookbook.viewmodel.viewmodel.PlannerViewModel;
@@ -64,8 +66,10 @@ public class PlannerEntryAdapter extends RecyclerView.Adapter<PlannerEntryAdapte
     }
 
     public void updateList(@NonNull List<Entry> entries) {
+        PlannerEntryDiffCallback diff = new PlannerEntryDiffCallback(this.mEntries, entries);
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(diff, true);
         this.mEntries = entries;
-        notifyDataSetChanged();
+        result.dispatchUpdatesTo(this);
     }
 
     @NonNull

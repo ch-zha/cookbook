@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Step;
 import com.cookbook.R;
+import com.cookbook.ui.adapter.diffutils.StepDiffCallback;
 
 import java.util.List;
 
@@ -44,8 +46,9 @@ public class RecipeStepListAdapter extends RecyclerView.Adapter<RecipeStepListAd
     }
 
     public void updateList(List<Step> steps) {
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new StepDiffCallback(mSteps, steps), true);
         this.mSteps = steps;
-        notifyDataSetChanged();
+        result.dispatchUpdatesTo(this);
     }
 
     @Override

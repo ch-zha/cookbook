@@ -1,7 +1,5 @@
 package com.cookbook.ui.adapter.diffutils;
 
-import android.util.SparseArray;
-
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 
@@ -9,12 +7,12 @@ import com.cookbook.data.entity.Entry;
 
 import java.util.List;
 
-public class PlannerDiffCallback extends DiffUtil.Callback {
+public class PlannerEntryDiffCallback extends DiffUtil.Callback {
 
-    private SparseArray<List<Entry>> newEntries;
-    private SparseArray<List<Entry>> oldEntries;
+    private List<Entry> newEntries;
+    private List<Entry> oldEntries;
 
-    public PlannerDiffCallback(SparseArray<List<Entry>> oldEntries, SparseArray<List<Entry>> newEntries) {
+    public PlannerEntryDiffCallback(List<Entry> oldEntries, List<Entry> newEntries) {
         this.newEntries = newEntries;
         this.oldEntries = oldEntries;
     }
@@ -31,18 +29,12 @@ public class PlannerDiffCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return  oldItemPosition == newItemPosition;
+        return oldEntries.get(oldItemPosition).getMealId() == newEntries.get(newItemPosition).getMealId();
     }
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        if (oldEntries.get(oldItemPosition).size() != newEntries.get(newItemPosition).size())
-            return false;
-        for (int i = 0; i < oldEntries.get(oldItemPosition).size(); i++) {
-            if (oldEntries.get(oldItemPosition).get(i).getMealId() != newEntries.get(newItemPosition).get(i).getMealId())
-                return false;
-        }
-        return true;
+        return oldEntries.get(oldItemPosition).getMealId() == newEntries.get(newItemPosition).getMealId();
     }
 
     @Nullable

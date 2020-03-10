@@ -7,11 +7,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Ingredient;
 import com.cookbook.R;
 import com.cookbook.data.entity.MeasurementUnit;
+import com.cookbook.ui.adapter.diffutils.IngredientDiffCallback;
 
 import java.util.List;
 
@@ -24,9 +26,11 @@ public class RecipeIngredientListAdapter extends RecyclerView.Adapter<RecipeIngr
     }
 
     public void updateList(List<Ingredient> ingredients) {
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new IngredientDiffCallback(mIngredients, ingredients), true);
         this.mIngredients = ingredients;
-        notifyDataSetChanged();
+        result.dispatchUpdatesTo(this);
     }
+
 
     @NonNull
     @Override

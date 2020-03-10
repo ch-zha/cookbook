@@ -11,7 +11,7 @@ import com.cookbook.data.entity.Entry;
 import com.cookbook.data.entity.Recipe;
 import com.cookbook.data.entity.Step;
 
-@Database(  version = 6,
+@Database(  version = 7,
             exportSchema = true,
             entities = {Recipe.class, Ingredient.class, Step.class, Entry.class})
 public abstract class RecipeDatabase extends RoomDatabase {

@@ -9,11 +9,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.data.entity.Entry;
 import com.cookbook.ui.PlannerFragment;
+import com.cookbook.ui.adapter.diffutils.PlannerDiffCallback;
 import com.cookbook.ui.listener.PlannerEntryListener;
 import com.cookbook.ui.util.EditMode;
 import com.cookbook.R;
@@ -26,7 +28,7 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.MenuView
     private Fragment owner;
     private List<Entry> mEntries = null;
     private SparseArray<List<Entry>> mDays = null;
-//    private RecyclerView.RecycledViewPool viewPool = null;
+    private RecyclerView.RecycledViewPool viewPool = null;
     private PlannerEntryListener listener;
     private String[] dayNames = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}; //TODO make this generated
 
@@ -42,25 +44,28 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.MenuView
         this.owner = owner;
         this.listener = listener;
         this.mEntries = planner_days;
-        sortEntriesIntoDays();
-//        this.viewPool = new RecyclerView.RecycledViewPool();
+        this.mDays = sortEntriesIntoDays(mEntries);
+        this.viewPool = new RecyclerView.RecycledViewPool();
 
     }
 
     public void updateList(@NonNull List<Entry> entries) {
         this.mEntries = entries;
-        sortEntriesIntoDays();
-        notifyDataSetChanged();
+        SparseArray<List<Entry>> newDays = sortEntriesIntoDays(entries);
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new PlannerDiffCallback(mDays, newDays), false);
+        this.mDays = newDays;
+        result.dispatchUpdatesTo(this);
     }
 
-    private void sortEntriesIntoDays() {
-        this.mDays = new SparseArray<>();
+    private SparseArray<List<Entry>> sortEntriesIntoDays(List<Entry> entries) {
+        SparseArray<List<Entry>> newDays = new SparseArray<>();
         for (int i = 0; i < PlannerFragment.DAYS_DISPLAYED; i++) {
-            mDays.put(i, new ArrayList<Entry>());
+            newDays.put(i, new ArrayList<>());
         }
-        for (Entry entry : mEntries) {
-            mDays.get(entry.getDay()).add(entry);
+        for (Entry entry : entries) {
+            newDays.get(entry.getDay()).add(entry);
         }
+        return newDays;
     }
 
     @Override

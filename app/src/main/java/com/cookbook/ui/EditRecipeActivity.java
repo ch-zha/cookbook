@@ -191,6 +191,12 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
         }
     }
 
+    void closeAll() {
+        appBar.setExpanded(false, true);
+        hideIngredients();
+        hideSteps();
+    }
+
     // 0 = appBar, 1 = ingredients, 2 = steps
     void toggleSelected(int selected) {
         switch (selected) {
