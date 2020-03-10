@@ -34,6 +34,10 @@ public class Repository {
         return recipeDao.getRecipeName(id);
     }
 
+    public LiveData<String> getRecipeImg(int id) {
+        return recipeDao.getRecipeImg(id);
+    }
+
     public long addRecipe(String name, String thumb) {
         return recipeDao.addRecipe(new Recipe(name, thumb));
     }

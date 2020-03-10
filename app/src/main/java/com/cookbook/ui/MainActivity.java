@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent != null && intent.getAction().equals(Intent.ACTION_INSERT)) {
+        if (intent != null && intent.getAction() != null
+                && intent.getAction().equals(Intent.ACTION_INSERT)) {
 
             Intent updateDB = new Intent(this, UpdatePlannerService.class);
             updateDB.putExtra(UpdatePlannerService.ACTION_KEY, UpdatePlannerService.Action.ADD);

@@ -5,8 +5,20 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccent2</item>
     </style>
+
+<!--&lt;!&ndash;    Planner headers&ndash;&gt;-->
+<!--    <style name="Display2" parent="TextAppearance.AppCompat.Display2">-->
+<!--        <item name="android:textSize">30sp</item>-->
+<!--        <item name="android:fontFamily">@font/lora</item>-->
+<!--    </style>-->
+
+<!--&lt;!&ndash;    Planner body&ndash;&gt;-->
+<!--    <style name="Large" parent="TextAppearance.AppCompat.Large">-->
+<!--        <item name="android:fontFamily">@font/roboto_light</item>-->
+<!--        <item name="android:color">@android:color/darker_gray</item>-->
+<!--    </style>-->
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

@@ -34,7 +34,7 @@ public interface RecipeDao {
             "ORDER BY name")
     LiveData<List<Recipe>> getAllRecipes();
 
-    @Query("SELECT name, id " +
+    @Query("SELECT name, id, thumb " +
             "FROM recipes " +
             "WHERE name LIKE :query " +
             "ORDER BY name")
@@ -43,6 +43,10 @@ public interface RecipeDao {
     @Query("SELECT name from recipes " +
             "WHERE id=:id")
     LiveData<String> getRecipeName(int id);
+
+    @Query("SELECT thumb FROM recipes " +
+            "WHERE id=:recipe_id")
+    LiveData<String> getRecipeImg(int recipe_id);
 
     @Insert
     long addRecipe(Recipe recipe);

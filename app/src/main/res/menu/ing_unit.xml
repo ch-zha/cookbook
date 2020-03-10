@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    Note: make sure these match measurementunit strings-->
+    <item
+        android:id="@+id/opt_whole"
+        android:title="Whole" />
+    <item
+        android:id="@+id/opt_gram"
+        android:title="Gram" />
+    <item
+        android:id="@+id/opt_tbsp"
+        android:title="TBSP" />
+    <item
+        android:id="@+id/opt_tsp"
+        android:title="TSP" />
+    <item
+        android:id="@+id/opt_cup"
+        android:title="Cup" />
+    <item
+        android:id="@+id/opt_lb"
+        android:title="lb" />
+    <item
+        android:id="@+id/opt_ml"
+        android:title="mL" />
+    <item
+        android:id="@+id/opt_pinch"
+        android:title="Pinch" />
+</menu>

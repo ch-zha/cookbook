@@ -2,29 +2,36 @@ package com.cookbook.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cookbook.data.entity.Ingredient;
 import com.cookbook.data.entity.MeasurementUnit;
 import com.cookbook.ui.adapter.EditRecipeIngredientListAdapter;
 import com.cookbook.ui.adapter.EditRecipeStepListAdapter;
 import com.cookbook.ui.listener.EditIngredientListener;
 import com.cookbook.ui.listener.EditStepListener;
+import com.cookbook.ui.util.AnimUtil;
 import com.cookbook.viewmodel.service.UpdateIngredientsService;
 import com.cookbook.viewmodel.service.UpdateStepsService;
 import com.cookbook.viewmodel.viewmodel.RecipeDetailViewModel;
 import com.cookbook.R;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -38,12 +45,13 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     private RecipeDetailViewModel viewModel;
     private RecyclerView rv_steps;
     private RecyclerView rv_ingredients;
+    private AppBarLayout appBar;
     private int recipe_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_recipe_main);
+        setContentView(R.layout.view_recipe_main);
 
         // Get recipe instance (default value is -1)
         Intent intent = getIntent();
@@ -69,11 +77,6 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
         rv_steps.setAdapter(new EditRecipeStepListAdapter(new ArrayList<>(), this));
         rv_steps.setLayoutManager(new LinearLayoutManager(this));
 
-        // Set toolbar
-        Toolbar toolbar = findViewById(R.id.edit_recipe_toolbar);
-        setSupportActionBar(toolbar);
-        setToolbarName(recipe_name);
-
         //Set recipe
         if (recipe_id != -1) setRecipe(recipe_id); //TODO do error handling
 
@@ -85,6 +88,7 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
 
         //Set FAB
         FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setImageDrawable(getDrawable(R.drawable.ic_done_24px));
         fab.setOnClickListener(v -> {
             Intent goToView = new Intent(this, ViewRecipeActivity.class);
             goToView.putExtra(ViewRecipeActivity.RECIPE_NAME_KEY, recipe_name);
@@ -94,12 +98,43 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
             // Take this activity off the stack
             finish();
         });
+
+        // Set section headers
+        View ingredients_header = findViewById(R.id.ingredients_header);
+        View steps_header = findViewById(R.id.steps_header);
+
+        ingredients_header.setOnClickListener(v -> toggleSelected(1));
+        steps_header.setOnClickListener(v -> toggleSelected(2));
+
+
+        // Set image
+        ImageView img = findViewById(R.id.recipe_image);
+        viewModel.getImg().observe(this, imgUrl -> {
+            if (img != null)
+                Picasso.get().load(imgUrl).into(img);
+        });
+
+
+        // Set toolbar
+        Toolbar toolbar = findViewById(R.id.edit_recipe_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(recipe_name);
+        appBar = findViewById(R.id.expanding_app_bar);
+        img.setOnClickListener(v -> toggleSelected(0));
+        toolbar.setOnClickListener(v -> toggleSelected(0));
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.recipes, menu);
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        toggleSelected(1);
     }
 
     private void setRecipe(int recipe_id) {
@@ -123,8 +158,6 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
         switch (item.getItemId()) {
             case R.id.action_close:
                 Intent restart = new Intent(this, MainActivity.class);
-                restart.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                restart.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(restart);
                 overridePendingTransition(R.anim.no_anim, R.anim.slide_down);
                 return true;
@@ -134,15 +167,75 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     }
 
 
+    void hideIngredients() {
+        if (rv_ingredients.isShown()) {
+            AnimUtil.slide_up(this, rv_ingredients);
+        }
+    }
+
+    void showIngredients() {
+        if (!rv_ingredients.isShown()) {
+            AnimUtil.slide_down(this, rv_ingredients);
+        }
+    }
+
+    void hideSteps() {
+        if (rv_steps.isShown()) {
+            AnimUtil.slide_up(this, rv_steps);
+        }
+    }
+
+    void showSteps() {
+        if (!rv_steps.isShown()) {
+            AnimUtil.slide_down(this, rv_steps);
+        }
+    }
+
+    // 0 = appBar, 1 = ingredients, 2 = steps
+    void toggleSelected(int selected) {
+        switch (selected) {
+            case 0:
+                boolean expanded = (appBar.getHeight() - appBar.getBottom()) == 0;
+                if (expanded)
+                    appBar.setExpanded(false, true);
+                else {
+                    appBar.setExpanded(true, true);
+                    hideIngredients();
+                    hideSteps();
+                }
+                return;
+            case 1:
+                if (rv_ingredients.isShown()) {
+                    hideIngredients();
+                } else {
+                    appBar.setExpanded(false, true);
+                    showIngredients();
+                    hideSteps();
+                }
+                return;
+            case 2:
+                if (rv_steps.isShown()) {
+                    hideSteps();
+                } else {
+                    appBar.setExpanded(false, true);
+                    hideIngredients();
+                    showSteps();
+                }
+                return;
+            default:
+                return;
+        }
+    }
+
     /*** Edit Step Listener Functions ***/
 
     @Override
     public void onEditStep(String step, int step_id) {
 
         Intent updateDB = new Intent(this, UpdateStepsService.class);
-        updateDB.putExtra("instructions", step);
-        updateDB.putExtra("step_id", step_id);
-        updateDB.putExtra("action", UpdateStepsService.Action.UPDATE);
+        updateDB.putExtra(UpdateStepsService.INSTR_KEY, step);
+        updateDB.putExtra(UpdateStepsService.STEP_ID_KEY, step_id);
+        updateDB.putExtra(UpdateStepsService.ACTION_KEY, UpdateStepsService.Action.UPDATE);
         startService(updateDB);
 
     }
@@ -151,9 +244,9 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     public void onAddStep(String step) {
 
         Intent updateDB = new Intent(this, UpdateStepsService.class);
-        updateDB.putExtra("instructions", step);
-        updateDB.putExtra("recipe_id", recipe_id);
-        updateDB.putExtra("action", UpdateStepsService.Action.ADD);
+        updateDB.putExtra(UpdateStepsService.INSTR_KEY, step);
+        updateDB.putExtra(UpdateStepsService.RECIPE_ID_KEY, recipe_id);
+        updateDB.putExtra(UpdateStepsService.ACTION_KEY, UpdateStepsService.Action.ADD);
         startService(updateDB);
 
     }
@@ -162,8 +255,8 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     public void onDeleteStep(int step_id) {
 
         Intent updateDB = new Intent(this, UpdateStepsService.class);
-        updateDB.putExtra("step_id", step_id);
-        updateDB.putExtra("action", UpdateStepsService.Action.DELETE);
+        updateDB.putExtra(UpdateStepsService.STEP_ID_KEY, step_id);
+        updateDB.putExtra(UpdateStepsService.ACTION_KEY, UpdateStepsService.Action.DELETE);
         startService(updateDB);
 
     }
@@ -179,11 +272,11 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     public void onAddIngredient(String ingredient_name, double quantity, MeasurementUnit unit) {
 
         Intent updateDB = new Intent(this, UpdateIngredientsService.class);
-        updateDB.putExtra("ingredient_name", ingredient_name);
-        updateDB.putExtra("recipe_id", recipe_id);
-        updateDB.putExtra("quantity", quantity);
-        updateDB.putExtra("unit", unit);
-        updateDB.putExtra("action", UpdateIngredientsService.Action.ADD);
+        updateDB.putExtra(UpdateIngredientsService.ING_NAME_KEY, ingredient_name);
+        updateDB.putExtra(UpdateIngredientsService.RECIPE_ID_KEY, recipe_id);
+        updateDB.putExtra(UpdateIngredientsService.ING_QUANT_KEY, quantity);
+        updateDB.putExtra(UpdateIngredientsService.ING_UNIT_KEY, unit);
+        updateDB.putExtra(UpdateIngredientsService.ACTION_KEY, UpdateIngredientsService.Action.ADD);
         startService(updateDB);
 
     }
@@ -192,9 +285,9 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     public void onDeleteIngredient(String ingredient_name) {
 
         Intent updateDB = new Intent(this, UpdateIngredientsService.class);
-        updateDB.putExtra("ingredient_name", ingredient_name);
-        updateDB.putExtra("recipe_id", recipe_id);
-        updateDB.putExtra("action", UpdateIngredientsService.Action.DELETE);
+        updateDB.putExtra(UpdateIngredientsService.ING_NAME_KEY, ingredient_name);
+        updateDB.putExtra(UpdateIngredientsService.RECIPE_ID_KEY, recipe_id);
+        updateDB.putExtra(UpdateIngredientsService.ACTION_KEY, UpdateIngredientsService.Action.DELETE);
         startService(updateDB);
 
     }
@@ -203,10 +296,10 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     public void onUpdateIngredientName(String ingredient_name, String new_name) {
 
         Intent updateDB = new Intent(this, UpdateIngredientsService.class);
-        updateDB.putExtra("ingredient_name", ingredient_name);
-        updateDB.putExtra("new_name", new_name);
-        updateDB.putExtra("recipe_id", recipe_id);
-        updateDB.putExtra("action", UpdateIngredientsService.Action.UPDATE_NAME);
+        updateDB.putExtra(UpdateIngredientsService.ING_NAME_KEY, ingredient_name);
+        updateDB.putExtra(UpdateIngredientsService.ING_NEW_NAME_KEY, new_name);
+        updateDB.putExtra(UpdateIngredientsService.RECIPE_ID_KEY, recipe_id);
+        updateDB.putExtra(UpdateIngredientsService.ACTION_KEY, UpdateIngredientsService.Action.UPDATE_NAME);
         startService(updateDB);
 
     }
@@ -215,10 +308,10 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     public void onUpdateIngredientQuantity(String ingredient_name, double quantity) {
 
         Intent updateDB = new Intent(this, UpdateIngredientsService.class);
-        updateDB.putExtra("ingredient_name", ingredient_name);
-        updateDB.putExtra("recipe_id", recipe_id);
-        updateDB.putExtra("quantity", quantity);
-        updateDB.putExtra("action", UpdateIngredientsService.Action.UPDATE_QUANTITY);
+        updateDB.putExtra(UpdateIngredientsService.ING_NAME_KEY, ingredient_name);
+        updateDB.putExtra(UpdateIngredientsService.RECIPE_ID_KEY, recipe_id);
+        updateDB.putExtra(UpdateIngredientsService.ING_QUANT_KEY, quantity);
+        updateDB.putExtra(UpdateIngredientsService.ACTION_KEY, UpdateIngredientsService.Action.UPDATE_QUANTITY);
         startService(updateDB);
 
     }
@@ -227,12 +320,54 @@ public class EditRecipeActivity extends AppCompatActivity implements EditStepLis
     public void onUpdateIngredientUnit(String ingredient_name, MeasurementUnit unit) {
 
         Intent updateDB = new Intent(this, UpdateIngredientsService.class);
-        updateDB.putExtra("ingredient_name", ingredient_name);
-        updateDB.putExtra("recipe_id", recipe_id);
-        updateDB.putExtra("unit", unit);
-        updateDB.putExtra("action", UpdateIngredientsService.Action.UPDATE_UNIT);
+        updateDB.putExtra(UpdateIngredientsService.ING_NAME_KEY, ingredient_name);
+        updateDB.putExtra(UpdateIngredientsService.RECIPE_ID_KEY, recipe_id);
+        updateDB.putExtra(UpdateIngredientsService.ING_UNIT_KEY, unit);
+        updateDB.putExtra(UpdateIngredientsService.ACTION_KEY, UpdateIngredientsService.Action.UPDATE_UNIT);
         startService(updateDB);
 
+    }
+
+    @Override
+    public void onClickUnitButton(View view, Ingredient ingredient) {
+        PopupMenu popup = new PopupMenu(this, view);
+
+        // This activity implements OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.opt_whole:
+                        onUpdateIngredientUnit(ingredient.getName(), MeasurementUnit.Whole);
+                        return true;
+                    case R.id.opt_gram:
+                        onUpdateIngredientUnit(ingredient.getName(), MeasurementUnit.Gram);
+                        return true;
+                    case R.id.opt_cup:
+                        onUpdateIngredientUnit(ingredient.getName(), MeasurementUnit.Cup);
+                        return true;
+                    case R.id.opt_lb:
+                        onUpdateIngredientUnit(ingredient.getName(), MeasurementUnit.lb);
+                        return true;
+                    case R.id.opt_ml:
+                        onUpdateIngredientUnit(ingredient.getName(), MeasurementUnit.mL);
+                        return true;
+                    case R.id.opt_tbsp:
+                        onUpdateIngredientUnit(ingredient.getName(), MeasurementUnit.TBSP);
+                        return true;
+                    case R.id.opt_tsp:
+                        onUpdateIngredientUnit(ingredient.getName(), MeasurementUnit.TSP);
+                        return true;
+                    case R.id.opt_pinch:
+                        onUpdateIngredientUnit(ingredient.getName(), MeasurementUnit.Pinch);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.inflate(R.menu.ing_unit);
+        popup.show();
     }
 
 }

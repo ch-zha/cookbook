@@ -2,9 +2,12 @@ package com.cookbook.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,9 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cookbook.ui.adapter.RecipeIngredientListAdapter;
 import com.cookbook.ui.adapter.RecipeStepListAdapter;
+import com.cookbook.ui.listener.OverscrollListener;
+import com.cookbook.ui.util.AnimUtil;
+import com.cookbook.ui.util.OverscrollLayout;
 import com.cookbook.viewmodel.viewmodel.RecipeDetailViewModel;
 import com.cookbook.R;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -29,6 +37,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
     private RecyclerView rv_ingredients = null;
     private RecyclerView rv_steps = null;
+    private AppBarLayout appBar = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,8 +50,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
         String recipe_name = intent.getStringExtra(RECIPE_NAME_KEY);
 
         // Find recyclerviews
-        rv_ingredients = (RecyclerView) findViewById(R.id.rv_recipe_ingredients);
-        rv_steps = (RecyclerView) findViewById(R.id.rv_recipe_steps);
+        rv_ingredients = findViewById(R.id.rv_recipe_ingredients);
+        rv_steps = findViewById(R.id.rv_recipe_steps);
 
         // Create and set adapter/layoutmanager
         rv_ingredients.setAdapter(new RecipeIngredientListAdapter(new ArrayList<>()));
@@ -62,11 +71,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
             ((RecipeStepListAdapter) rv_steps.getAdapter()).updateList(steps);
         }));
 
-        // Set toolbar
-        Toolbar toolbar = findViewById(R.id.edit_recipe_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(recipe_name);
-
         // Set up FAB
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
@@ -78,6 +82,94 @@ public class ViewRecipeActivity extends AppCompatActivity {
             finish();
             overridePendingTransition(R.anim.no_anim, R.anim.no_anim);
         });
+
+        // Set section headers
+        View ingredients_header = findViewById(R.id.ingredients_header);
+        View steps_header = findViewById(R.id.steps_header);
+
+        ingredients_header.setOnClickListener(v -> toggleSelected(1));
+        steps_header.setOnClickListener(v -> toggleSelected(2));
+
+        // Set image
+        ImageView img = findViewById(R.id.recipe_image);
+        viewModel.getImg().observe(this, imgUrl -> {
+            if (img != null)
+                Picasso.get().load(imgUrl).into(img);
+        });
+
+        // Set toolbar
+        Toolbar toolbar = findViewById(R.id.edit_recipe_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(recipe_name);
+        appBar = findViewById(R.id.expanding_app_bar);
+        img.setOnClickListener(v -> toggleSelected(0));
+        toolbar.setOnClickListener(v -> toggleSelected(0));
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    void hideIngredients() {
+        if (rv_ingredients.isShown()) {
+            AnimUtil.slide_up(this, rv_ingredients);
+        }
+    }
+
+    void showIngredients() {
+        if (!rv_ingredients.isShown()) {
+            AnimUtil.slide_down(this, rv_ingredients);
+        }
+    }
+
+    void hideSteps() {
+        if (rv_steps.isShown()) {
+            AnimUtil.slide_up(this, rv_steps);
+        }
+    }
+
+    void showSteps() {
+        if (!rv_steps.isShown()) {
+            AnimUtil.slide_down(this, rv_steps);
+        }
+    }
+
+    // 0 = appBar, 1 = ingredients, 2 = steps
+    void toggleSelected(int selected) {
+        switch (selected) {
+            case 0:
+                boolean expanded = (appBar.getHeight() - appBar.getBottom()) == 0;
+                if (expanded)
+                    appBar.setExpanded(false, true);
+                else {
+                    appBar.setExpanded(true, true);
+                    hideIngredients();
+                    hideSteps();
+                }
+                return;
+            case 1:
+                if (rv_ingredients.isShown()) {
+                    hideIngredients();
+                } else {
+                    appBar.setExpanded(false, true);
+                    showIngredients();
+                    hideSteps();
+                }
+                return;
+            case 2:
+                if (rv_steps.isShown()) {
+                    hideSteps();
+                } else {
+                    appBar.setExpanded(false, true);
+                    hideIngredients();
+                    showSteps();
+                }
+                return;
+            default:
+                return;
+        }
     }
 
     @Override
@@ -91,8 +183,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_close:
                 Intent restart = new Intent(this, MainActivity.class);
-                restart.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                restart.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(restart);
                 overridePendingTransition(R.anim.no_anim, R.anim.slide_down);
                 return true;

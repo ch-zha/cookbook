@@ -112,7 +112,7 @@ public class PlannerEntryAdapter extends RecyclerView.Adapter<PlannerEntryAdapte
 
         if (editMode) {
             if (position == mEntries.size()) {
-                holder.clear.setVisibility(View.GONE);
+                holder.clear.setVisibility(View.INVISIBLE);
                 holder.name.setText(owner.getString(R.string.add_entry_prompt));
                 holder.name.setTypeface(null, Typeface.ITALIC);
                 holder.name.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +127,7 @@ public class PlannerEntryAdapter extends RecyclerView.Adapter<PlannerEntryAdapte
                 holder.clear.setVisibility(View.VISIBLE);
             }
         } else
-            holder.clear.setVisibility(View.GONE);
+            holder.clear.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -144,8 +144,8 @@ public class PlannerEntryAdapter extends RecyclerView.Adapter<PlannerEntryAdapte
         MealViewHolder(View view) {
             super(view);
 
-            name = view.findViewById(R.id.menu_meal_name);
-            clear = view.findViewById(R.id.clear_entry);
+            name = view.findViewById(R.id.entry_name);
+            clear = view.findViewById(R.id.clear);
 
             clear.setOnClickListener(this);
         }

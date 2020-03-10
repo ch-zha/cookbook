@@ -21,6 +21,7 @@ public class RecipeDetailViewModel extends AndroidViewModel {
 
     private LiveData<List<Ingredient>> ingredients;
     private LiveData<List<Step>> steps;
+    private LiveData<String> img;
 
     public RecipeDetailViewModel(@NonNull Application application) {
         super(application);
@@ -32,6 +33,7 @@ public class RecipeDetailViewModel extends AndroidViewModel {
         this.recipeId = id;
         this.ingredients = repository.getIngredientsForRecipe(recipeId);
         this.steps = repository.getStepsForRecipe(recipeId);
+        this.img = repository.getRecipeImg(id);
     }
 
     public LiveData<List<Ingredient>> getIngredients() {
@@ -40,5 +42,9 @@ public class RecipeDetailViewModel extends AndroidViewModel {
 
     public LiveData<List<Step>> getSteps() {
         return this.steps;
+    }
+
+    public LiveData<String> getImg() {
+        return this.img;
     }
 }

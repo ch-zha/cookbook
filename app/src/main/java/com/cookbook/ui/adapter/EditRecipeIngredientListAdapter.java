@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,17 +58,21 @@ public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRe
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
+
         if (position < mIngredients.size()) {
             Ingredient ingredient = mIngredients.get(position);
 
             holder.name.setText(ingredient.getName());
             holder.quantity.setText(Double.toString(ingredient.getQuantity()));
-            holder.unit.setSelection(unitOptions.indexOf(MeasurementUnit.getMeasurementUnitString(ingredient.getUnit())));
+            holder.unit.setText(MeasurementUnit.getMeasurementUnitString(ingredient.getUnit()));
+            holder.unit.setOnClickListener(v -> listener.onClickUnitButton(v, mIngredients.get(position)));
             holder.clear.setVisibility(View.VISIBLE);
         } else if (position == mIngredients.size()) {
             holder.name.getText().clear();
             holder.quantity.getText().clear();
-            holder.unit.setSelection(0);
+            holder.unit.setText("");
+            //Note: Unit should not be editable for new ingredients until registered. Figure out how to set temp later
+            holder.unit.setOnClickListener(null);
             holder.clear.setVisibility(View.INVISIBLE);
         }
     }
@@ -80,28 +86,21 @@ public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRe
 
         EditText name;
         EditText quantity;
-        Spinner unit;
+        TextView unit;
         ImageButton clear;
 
         IngredientViewHolder(View view) {
             super(view);
-            if (getAdapterPosition() < 0 || getAdapterPosition() > mIngredients.size()) {
-                Log.d("Spinner", "adapter at position: " + getAdapterPosition());
-            }
 
             name = view.findViewById(R.id.recipe_ingredient_name);
             quantity = view.findViewById(R.id.recipe_ingredient_quantity);
             unit = view.findViewById(R.id.recipe_ingredient_unit);
             clear = view.findViewById(R.id.clear);
 
-            name.setHorizontallyScrolling(false);
-            quantity.setHorizontallyScrolling(true);
-
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(view.getContext(),
                     android.R.layout.simple_spinner_item,
                     unitOptions);
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            unit.setAdapter(arrayAdapter);
 
             quantity.setOnEditorActionListener((v, actionId, event) -> {
 
@@ -138,31 +137,9 @@ public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRe
 
             });
 
-            unit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    String item = (String) parent.getItemAtPosition(position);
-                    MeasurementUnit unit = MeasurementUnit.getMeasurementUnit(item);
-                    if (getAdapterPosition() < 0) {
-                        //TODO not sure why this is happening? maybe because of NestedScrollView? find out
-                    } else if (getAdapterPosition() < mIngredients.size()) {
-                        String ingredient = mIngredients.get(getAdapterPosition()).getName();
-                        listener.onUpdateIngredientUnit(ingredient, unit);
-                    } else {
-                        tempUnit = unit;
-                    }
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-
-            });
-
             clear.setOnClickListener(v ->
                     listener.onDeleteIngredient(mIngredients.get(getAdapterPosition()).getName()));
         }
+
     }
 }
