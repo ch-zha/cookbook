@@ -32,7 +32,7 @@ public class IngredientDiffCallback extends DiffUtil.Callback {
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
         // Not checking for recipe id bc that would return false positive in Shopping List and
         // is irrelevant for View/Edit recipe
-        return (oldIngs.get(oldItemPosition).getName() == newIngs.get(newItemPosition).getName());
+        return (oldIngs.get(oldItemPosition).getName().equals(newIngs.get(newItemPosition).getName()));
     }
 
     @Override

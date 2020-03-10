@@ -39,7 +39,7 @@ public class StepDiffCallback extends DiffUtil.Callback {
         Step oldIng = oldSteps.get(oldItemPosition);
         Step newIng = newSteps.get(newItemPosition);
 
-        return (oldIng.getInstructions() == newIng.getInstructions());
+        return (oldIng.getInstructions().equals(newIng.getInstructions()));
     }
 
     @Nullable

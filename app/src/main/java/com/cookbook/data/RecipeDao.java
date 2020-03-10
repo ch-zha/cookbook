@@ -60,8 +60,8 @@ public interface RecipeDao {
 
     /**** Ingredients Table ****/
     @Query("SELECT * FROM ingredients " +
-            "WHERE recipe_id = :id " +
-            "ORDER BY name")
+            "WHERE recipe_id = :id "
+    )
     LiveData<List<Ingredient>> getIngredientsForRecipe(int id);
 
     @Insert

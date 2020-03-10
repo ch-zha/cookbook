@@ -41,7 +41,7 @@ public class EditRecipeIngredientListAdapter extends RecyclerView.Adapter<EditRe
     }
 
     public void updateList(List<Ingredient> ingredients) {
-        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new IngredientDiffCallback(mIngredients, ingredients), false);
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new IngredientDiffCallback(mIngredients, ingredients), true);
         this.mIngredients = ingredients;
         result.dispatchUpdatesTo(this);
         notifyItemChanged(mIngredients.size());
