@@ -80,7 +80,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
             startActivity(editRecipe);
             // Take this activity off the stack
             finish();
-            overridePendingTransition(R.anim.no_anim, R.anim.no_anim);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
         // Set section headers
